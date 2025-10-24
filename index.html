@@ -58,8 +58,8 @@
         }
 
         .panel {
-            background-color: rgba(20, 20, 20, 0.85); /* color_palette.panel_background */
-            backdrop-filter: blur(15px); /* effects.blur_background */
+            background-color: rgba(0, 0, 0, 0.7); /* تاریک کردن پس‌زمینه */
+            backdrop-filter: blur(5px); /* اعمال بلور به پس‌زمینه پشت پنل */
             z-index: 100;
         }
 
@@ -141,73 +141,7 @@
              border: 1px solid #8A2BE2;
         }
 
-        /* جلوه دایره زرد در گوشه‌های دکمه‌ها */
-        .btn::after, .btn::before {
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #FFB800; /* color_palette.primary */
-            box-shadow: 0 0 5px #FFB800, 0 0 10px #FFB800;
-            transition: all 0.3s ease-in-out;
-            z-index: 1; /* بالاتر از پس زمینه دکمه */
-            opacity: 0.8;
-        }
-
-        .btn::before {
-            top: -5px;
-            left: -5px;
-        }
-        .btn::after {
-            bottom: -5px;
-            right: -5px;
-        }
-        .btn:hover::before {
-            top: -8px;
-            left: -8px;
-            box-shadow: 0 0 8px #FFB800, 0 0 15px #FFB800, 0 0 25px #FFB800;
-            transform: scale(1.2);
-        }
-        .btn:hover::after {
-            bottom: -8px;
-            right: -8px;
-            box-shadow: 0 0 8px #FFB800, 0 0 15px #FFB800, 0 0 25px #FFB800;
-            transform: scale(1.2);
-        }
-        /* برای گوشه‌های دیگر */
-        .btn .corner-top-right, .btn .corner-bottom-left {
-            content: '';
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #FFB800;
-            box-shadow: 0 0 5px #FFB800, 0 0 10px #FFB800;
-            transition: all 0.3s ease-in-out;
-            z-index: 1;
-            opacity: 0.8;
-        }
-        .btn .corner-top-right {
-            top: -5px;
-            right: -5px;
-        }
-        .btn .corner-bottom-left {
-            bottom: -5px;
-            left: -5px;
-        }
-        .btn:hover .corner-top-right {
-            top: -8px;
-            right: -8px;
-            box-shadow: 0 0 8px #FFB800, 0 0 15px #FFB800, 0 0 25px #FFB800;
-            transform: scale(1.2);
-        }
-        .btn:hover .corner-bottom-left {
-            bottom: -8px;
-            left: -8px;
-            box-shadow: 0 0 8px #FFB800, 0 0 15px #FFB800, 0 0 25px #FFB800;
-            transform: scale(1.2);
-        }
+        /* جلوه دایره زرد در گوشه‌های دکمه‌ها حذف شد */
 
 
         /* --- ورودی‌ها --- */
@@ -399,21 +333,53 @@
             margin-bottom: 5px;
         }
 
-        /* --- پنل‌ها (تنظیمات، حالت‌های بازی) --- */
+        /* --- پنل‌ها (بازطراحی شده) --- */
         .panel-content {
-            /* style: glassmorphic_dark */
-            background: rgba(40, 40, 40, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #1F2A47; /* رنگ آبی تیره یکدست */
+            border: 2px solid #325A9E; /* حاشیه با تم */
             border-radius: 20px;
             padding: 30px;
             width: 95%;
             max-width: 500px; /* عرض بیشتر */
             text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* سایه قوی‌تر */
             position: relative;
             transform: translateY(0);
             transition: transform 0.4s ease-in-out;
+            /* استایل‌های گلس‌مورفیسم حذف شد */
         }
+        
+        /* اضافه کردن نقطه‌های زرد به پنل‌ها */
+        .panel-content::before,
+        .panel-content::after,
+        .panel-dot {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #FFB800; /* color_palette.primary */
+            box-shadow: 0 0 8px #FFB800;
+            z-index: 2;
+        }
+        
+        .panel-content::before { /* Top-Left */
+            top: 15px;
+            left: 15px;
+        }
+        .panel-content::after { /* Top-Right */
+            top: 15px;
+            right: 15px;
+        }
+        .panel-dot.corner-bottom-left-dot { /* Bottom-Left */
+            bottom: 15px;
+            left: 15px;
+        }
+        .panel-dot.corner-bottom-right-dot { /* Bottom-Right */
+            bottom: 15px;
+            right: 15px;
+        }
+
         .hidden .panel-content {
             transform: translateY(100%); /* برای transition: slide_up_fade_in */
         }
@@ -437,6 +403,7 @@
             transition: background 0.3s ease, transform 0.3s ease;
             outline: none; /* حذف outline پیش‌فرض */
             -webkit-tap-highlight-color: transparent; /* برای موبایل */
+            z-index: 3; /* باید بالای نقطه‌ها باشد */
         }
         .close-panel-btn:hover {
             background: rgba(255,0,0,0.6);
@@ -622,8 +589,6 @@
         <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
         
         <button id="register-btn" class="btn">
-            <span class="corner-top-right"></span>
-            <span class="corner-bottom-left"></span>
             ورود به بازی
         </button>
     </div>
@@ -642,13 +607,9 @@
         
         <div id="main-menu-buttons">
             <button id="start-flow-btn" class="btn">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 شروع فلو
             </button>
             <button id="online-beat-btn" class="btn">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 بیت آنلاین
             </button>
         </div>
@@ -673,11 +634,11 @@
             <button id="submit-rap-btn" class="btn">
                 <span class="corner-top-right"></span>
                 <span class="corner-bottom-left"></span>
+            <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنوییس...">
+            <button id="submit-rap-btn" class="btn">
                 بفرست
             </button>
             <button id="next-rap-btn" class="btn btn-secondary hidden">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 تکس بعدی
             </button>
         </div>
@@ -687,20 +648,15 @@
     <!-- پنل‌ها --><!-- 5. پنل تنظیمات --><div id="panel-settings" class="panel hidden panel-slide-up">
         <div class="panel-content">
             <button class="close-panel-btn" data-panel="panel-settings">X</button>
+            <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
             <h2>تنظیمات ایران رپ</h2>
             <button class="btn" data-message="کد هدیه (به زودی...)">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 کد هدیه
             </button>
             <button class="btn" data-message="سازندگان (به زودی...)">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 سازندگان
             </button>
             <button class="btn" data-message="پشتیبانی (به زودی...)">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
                 پشتیبانی
             </button>
         </div>
@@ -709,6 +665,7 @@
     <!-- 6. پنل حالت‌های بازی (کاملاً بازسازی شده) --><div id="panel-game-modes" class="panel hidden panel-slide-up">
         <div class="panel-content">
             <button class="close-panel-btn" data-panel="panel-game-modes">X</button>
+            <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
             <h2>نوع چالش خودت رو انتخاب کن</h2>
             
             <div id="game-modes-grid">
