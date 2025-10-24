@@ -347,46 +347,57 @@
             background-color: rgba(255, 184, 0, 0.2);
         }
 
-        /* --- [جدید] نوار ناوبری پایین صفحه --- */
+        /* --- [بازطراحی] نوار ناوبری پایین صفحه --- */
         #bottom-nav-bar {
             position: absolute;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: rgba(10, 10, 20, 0.85);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(10, 10, 20, 0.8)); /* گرادینت جذاب‌تر */
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            border-top: 2px solid #325A9E;
+            align-items: stretch; /* کشیده شدن دکمه‌ها در تمام ارتفاع */
+            padding: 5px 0; /* کاهش پدینگ عمودی */
+            border-top: 1px solid #FFB800; /* یک خط طلایی ظریف */
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.4); /* سایه برای عمق */
             z-index: 50;
+            height: 65px; /* ارتفاع ثابت */
         }
         .nav-btn {
+            flex: 1; /* تقسیم مساوی فضا */
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #fff;
+            justify-content: center; /* مرکزیت عمودی */
+            color: #A9A9A9; /* رنگ خنثی برای حالت عادی */
             background: none;
             border: none;
             font-family: 'Vazirmatn', sans-serif;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* کمی کوچک‌تر کردن فونت */
             cursor: pointer;
             transition: all 0.3s ease;
-            gap: 5px;
-            padding: 5px 15px;
+            gap: 4px; /* فاصله کمتر بین آیکون و متن */
+            padding: 5px 10px;
             outline: none;
             -webkit-tap-highlight-color: transparent;
+            border-radius: 10px;
+            margin: 0 5px;
         }
-        .nav-btn:hover {
-            color: #FFB800;
-            transform: translateY(-5px);
-        }
-        .nav-btn .icon {
-            font-size: 2rem;
+        .nav-btn:hover, .nav-btn.active {
+            color: #FFFFFF; /* رنگ سفید در حالت هاور */
+            background-color: rgba(255, 184, 0, 0.15); /* پس‌زمینه طلایی */
+            transform: translateY(-3px); /* حرکت کمتر به بالا */
         }
 
+        /* استایل آیکون‌های SVG */
+        .nav-btn .nav-icon {
+            width: 28px; /* اندازه ثابت برای آیکون‌ها */
+            height: 28px;
+            fill: currentColor; /* ارث‌بری رنگ از .nav-btn */
+            transition: all 0.3s ease;
+        }
 
         /* --- پنل‌ها (بازطراحی شده) --- */
         .panel-content {
@@ -615,18 +626,24 @@
             <button id="online-game-btn" class="btn btn-secondary">بازی آنلاین</button>
         </div>
 
-        <!-- [جدید] نوار ناوبری پایین -->
+        <!-- [بازطراحی] نوار ناوبری پایین -->
         <div id="bottom-nav-bar">
             <button class="nav-btn" data-message="مسیر (به زودی...)">
-                <span class="icon">🗺️</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+                </svg>
                 مسیر
             </button>
             <button class="nav-btn" data-message="بتل (به زودی...)">
-                <span class="icon">⚔️</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.71,3.29a1,1,0,0,0-1.42,0L3.29,19.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20.71,4.71a1,1,0,0,0,0-1.42Z M3.29,4.71,19.29,20.71a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L4.71,3.29a1,1,0,0,0-1.42,0Z"/>
+                </svg>
                 بتل
             </button>
             <button id="shop-nav-btn" class="nav-btn">
-                <span class="icon">🛒</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17,18a2,2,0,0,1-2,2,2,2,0,0,1-2-2,2,2,0,0,1,2-2,2,2,0,0,1,2,2M1,4H3.27l.94,2H20a1,1,0,0,1,.8,1.6L17.21,12.83a2,2,0,0,1-1.7,1.17H8.34l-.94,2H17v2H7a2,2,0,0,1-2-2c0-.35.09-.68.24-1L6,11.59l-1.35-2.45L3.4,4H1V4m6,14a2,2,0,0,1-2,2,2,2,0,0,1-2-2,2,2,0,0,1,2-2,2,2,0,0,1,2,2Z"/>
+                </svg>
                 فروشگاه
             </button>
         </div>
@@ -709,13 +726,11 @@
     <script>
         const config = {
             assets: {
+                // --- [تغییر] آواتارهای جدید شما ---
                 avatars: [
-                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۹۴۷_z6u.png",
-                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۷۴۳_lrn9.png",
-                    "https://i.pravatar.cc/150?img=1",
-                    "https://i.pravatar.cc/150?img=5",
-                    "https://i.pravatar.cc/150?img=8",
-                    "https://i.pravatar.cc/150?img=12"
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۴_۱۹۱۳۰۱_utr.png",
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۴_۱۹۱۲۴۴_dwyf.png",
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۹۴۷_9o3p.png"
                 ]
             },
             screens: {
