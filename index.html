@@ -150,9 +150,8 @@
             color: #FFFFFF; /* input_style.text_color */
             border: 2px solid #325A9E; /* border_radius */
             padding: 14px;
-            width: 85%;
-            max-width: 350px; /* عرض بیشتر */
-            margin: 10px 0;
+            width: 100%; /* تغییر برای پر کردن والد */
+            margin: 0; /* تغییر برای پر کردن والد */
             border-radius: 12px; /* input_style.border_radius */
             font-size: 1.1rem;
             font-family: 'Vazirmatn', sans-serif;
@@ -170,6 +169,45 @@
             border-color: #FFB800; /* جلوه فوکوس */
             box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
         }
+
+        /* --- کانتینر برای ورودی‌ها جهت اضافه کردن نقطه‌ها --- */
+        .input-wrapper {
+            position: relative;
+            width: 85%;
+            max-width: 350px;
+            margin: 10px 0;
+        }
+
+        .input-wrapper::before,
+        .input-wrapper::after,
+        .input-wrapper .corner-dot {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #FFB800;
+            box-shadow: 0 0 6px #FFB800;
+            z-index: 2;
+        }
+
+        .input-wrapper::before { /* Top-Left */
+            top: 10px;
+            left: 10px;
+        }
+        .input-wrapper::after { /* Top-Right */
+            top: 10px;
+            right: 10px;
+        }
+        .input-wrapper .corner-bottom-left-dot { /* Bottom-Left */
+            bottom: 10px;
+            left: 10px;
+        }
+        .input-wrapper .corner-bottom-right-dot { /* Bottom-Right */
+            bottom: 10px;
+            right: 10px;
+        }
+
 
         /* --- عناوین و متون --- */
         h1, h2 {
@@ -577,19 +615,33 @@
     <!-- پس‌زمینه اصلی --><div class="background-image"></div>
 
     <!-- 1. صفحه ثبت‌نام --><div id="screen-register" class="screen">
-        <h1>به دنیای ایران رپ خوش اومدی</h1>
-        <p>اطلاعات خودتو وارد کن تا وارد صحنه بشی</p>
-
-        <div class="avatar-selection" id="avatar-container">
+        
+        <div class="avatar-selection" id="avatar-container" style="margin-top: 20px; margin-bottom: 20px;">
             <!-- آواتارها به صورت داینامیک اضافه می‌شوند --></div>
         
-        <input type="text" id="username-input" class="input-field" placeholder="اسم رپر خودتو بنویس...">
-        <input type="number" id="age-input" class="input-field" placeholder="سن شما">
-        <input type="password" id="password-input" class="input-field" placeholder="رمز عبور">
-        <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
+        <div class="input-wrapper">
+            <input type="text" id="username-input" class="input-field" placeholder="اسم رپر خودتو بنویس...">
+            <span class="corner-dot corner-bottom-left-dot"></span>
+            <span class="corner-dot corner-bottom-right-dot"></span>
+        </div>
+        <div class="input-wrapper">
+            <input type="number" id="age-input" class="input-field" placeholder="سن شما">
+            <span class="corner-dot corner-bottom-left-dot"></span>
+            <span class="corner-dot corner-bottom-right-dot"></span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="password-input" class="input-field" placeholder="رمز عبور">
+            <span class="corner-dot corner-bottom-left-dot"></span>
+            <span class="corner-dot corner-bottom-right-dot"></span>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
+            <span class="corner-dot corner-bottom-left-dot"></span>
+            <span class="corner-dot corner-bottom-right-dot"></span>
+        </div>
         
-        <button id="register-btn" class="btn">
-            ورود به بازی
+        <button id="register-btn" class="btn" style="margin-top: 20px;">
+            ثبت نام
         </button>
     </div>
 
@@ -631,10 +683,6 @@
             <div id="feedback-message"></div>
             
             <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنویس...">
-            <button id="submit-rap-btn" class="btn">
-                <span class="corner-top-right"></span>
-                <span class="corner-bottom-left"></span>
-            <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنوییس...">
             <button id="submit-rap-btn" class="btn">
                 بفرست
             </button>
