@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ایران رپ</title>
     
-    <!-- فونت‌های فارسی با کیفیت بالا برای تم رپ --><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=Lalezar&display=swap" rel="stylesheet">
+    <!-- فونت‌های فارسی با کیفیت بالا برای تم رپ -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=Lalezar&display=swap" rel="stylesheet">
     
     <style>
         /* --- تنظیمات پایه --- */
@@ -22,6 +23,10 @@
 
         * {
             box-sizing: border-box;
+            -webkit-user-select: none; /* جلوگیری از انتخاب متن */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         /* --- پس‌زمینه --- */
@@ -35,7 +40,7 @@
             background-size: cover;
             background-position: center;
             z-index: -1;
-            filter: blur(8px) brightness(0.6); /* effects.blur_background + تیره‌تر کردن */
+            filter: blur(8px) brightness(0.6);
             transform: scale(1.1);
             transition: filter 0.5s ease;
         }
@@ -53,60 +58,57 @@
             justify-content: center;
             padding: 20px;
             opacity: 1;
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; /* transitions.default */
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
             z-index: 10;
         }
 
         .panel {
-            background-color: rgba(0, 0, 0, 0.7); /* تاریک کردن پس‌زمینه */
-            backdrop-filter: blur(5px); /* اعمال بلور به پس‌زمینه پشت پنل */
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
             z-index: 100;
         }
 
         .hidden {
             opacity: 0;
             pointer-events: none;
-            transform: translateY(20px); /* برای افکت اسلاید هنگام مخفی شدن */
+            transform: translateY(20px);
         }
-        .hidden.panel-slide-up { /* transition: slide_up_fade_in برای پنل ها */
+        .panel.hidden {
              transform: translateY(100%);
         }
 
         /* --- عناصر UI سفارشی: دکمه‌ها --- */
         .btn {
-            background-color: #325A9E; /* button_style.background_color */
-            color: #FFFFFF; /* button_style.text_color */
+            background-color: #325A9E;
+            color: #FFFFFF;
             border: none;
-            padding: 14px 30px; /* پدینگ بیشتر */
-            font-size: 1.2rem; /* فونت بزرگ‌تر */
+            padding: 14px 30px;
+            font-size: 1.2rem;
             font-family: 'Vazirmatn', sans-serif;
             font-weight: 700;
-            border-radius: 40px; /* button_style.shape: rounded_large */
+            border-radius: 40px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* button_style.shadow */
-            transition: all 0.3s ease-in-out; /* effects.hover_transition */
-            margin: 12px; /* مارجین بیشتر */
-            min-width: 240px; /* عرض بیشتر */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            transition: all 0.3s ease-in-out;
+            margin: 12px;
+            min-width: 240px;
             text-align: center;
             text-decoration: none;
-            position: relative; /* برای جلوه‌های نئونی و دایره‌ها */
+            position: relative;
             overflow: hidden;
             letter-spacing: 0.5px;
-            /* حذف جلوه آبی رنگ پیش‌فرض */
             outline: none;
-            -webkit-tap-highlight-color: transparent; /* برای موبایل */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* حذف جلوه‌های فوکوس و کلیک پیش‌فرض */
         .btn:focus, .btn:active {
             outline: none;
-            box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6); /* حفظ جلوه هاور */
-            transform: translateY(-3px) scale(1.02); /* حفظ جلوه هاور */
-            border: 1px solid #FFB800; /* حفظ جلوه هاور */
+            box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6);
+            transform: translateY(-3px) scale(1.02);
+            border: 1px solid #FFB800;
         }
 
-
-        .btn:before { /* جلوه نئونی در هاور */
+        .btn:before {
             content: '';
             position: absolute;
             top: 50%;
@@ -126,51 +128,46 @@
         }
         
         .btn:hover {
-            box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6); /* effects.hover_effect: soft_glow */
+            box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6);
             transform: translateY(-3px) scale(1.02);
-            color: #FFF; /* اطمینان از رنگ متن */
+            color: #FFF;
             border: 1px solid #FFB800;
         }
         
-        /* دکمه رنگ ثانویه */
         .btn-secondary {
-            background-color: #8A2BE2; /* color_palette.secondary */
+            background-color: #8A2BE2;
         }
         .btn-secondary:hover {
              box-shadow: 0 0 20px #8A2BE2, 0 0 30px #8A2BE2, 0 8px 20px rgba(0,0,0,0.6);
              border: 1px solid #8A2BE2;
         }
 
-        /* جلوه دایره زرد در گوشه‌های دکمه‌ها حذف شد */
-
-
         /* --- ورودی‌ها --- */
         .input-field {
-            background-color: #3C609E; /* input_style.background_color */
-            color: #FFFFFF; /* input_style.text_color */
-            border: 2px solid #325A9E; /* border_radius */
+            background-color: #3C609E;
+            color: #FFFFFF;
+            border: 2px solid #325A9E;
             padding: 14px;
-            width: 100%; /* تغییر برای پر کردن والد */
-            margin: 0; /* تغییر برای پر کردن والد */
-            border-radius: 12px; /* input_style.border_radius */
+            width: 100%;
+            margin: 0;
+            border-radius: 12px;
             font-size: 1.1rem;
             font-family: 'Vazirmatn', sans-serif;
-            text-align: center; /* alignment: center */
+            text-align: center;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            outline: none; /* حذف outline پیش‌فرض */
+            outline: none;
         }
 
         .input-field::placeholder {
-            color: #C0C0C0; /* input_style.placeholder_color */
+            color: #C0C0C0;
             opacity: 0.8;
         }
         .input-field:focus {
             outline: none;
-            border-color: #FFB800; /* جلوه فوکوس */
+            border-color: #FFB800;
             box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
         }
 
-        /* --- کانتینر برای ورودی‌ها جهت اضافه کردن نقطه‌ها --- */
         .input-wrapper {
             position: relative;
             width: 85%;
@@ -191,29 +188,16 @@
             z-index: 2;
         }
 
-        .input-wrapper::before { /* Top-Left */
-            top: 10px;
-            left: 10px;
-        }
-        .input-wrapper::after { /* Top-Right */
-            top: 10px;
-            right: 10px;
-        }
-        .input-wrapper .corner-bottom-left-dot { /* Bottom-Left */
-            bottom: 10px;
-            left: 10px;
-        }
-        .input-wrapper .corner-bottom-right-dot { /* Bottom-Right */
-            bottom: 10px;
-            right: 10px;
-        }
-
+        .input-wrapper::before { top: 10px; left: 10px; }
+        .input-wrapper::after { top: 10px; right: 10px; }
+        .input-wrapper .corner-bottom-left-dot { bottom: 10px; left: 10px; }
+        .input-wrapper .corner-bottom-right-dot { bottom: 10px; right: 10px; }
 
         /* --- عناوین و متون --- */
         h1, h2 {
-            font-family: 'Lalezar', cursive; /* فونت مخصوص عناوین */
-            color: #FFB800; /* color_palette.primary */
-            text-shadow: 0 0 15px rgba(255, 184, 0, 0.7), 0 0 10px rgba(255, 184, 0, 0.5); /* effects.glow: neon */
+            font-family: 'Lalezar', cursive;
+            color: #FFB800;
+            text-shadow: 0 0 15px rgba(255, 184, 0, 0.7), 0 0 10px rgba(255, 184, 0, 0.5);
             margin-top: 0;
             margin-bottom: 20px;
             letter-spacing: 1px;
@@ -228,24 +212,19 @@
         }
 
         /* --- صفحه ثبت‌نام --- */
-        #screen-register h1 {
-            font-size: 2.8rem; /* فونت بزرگ‌تر */
-        }
-        #screen-register p {
-            font-size: 1.2rem;
-            color: #E0E0E0;
-        }
+        #screen-register h1 { font-size: 2.8rem; }
+        #screen-register p { font-size: 1.2rem; color: #E0E0E0; }
         
         .avatar-selection {
             display: flex;
-            justify-content: center; /* layout: horizontal */
+            justify-content: center;
             margin: 25px 0;
-            gap: 20px; /* فاصله بین آواتارها */
+            gap: 20px;
         }
         .avatar-option {
-            width: 80px; /* بزرگ‌تر */
+            width: 80px;
             height: 80px;
-            border-radius: 50%; /* style: circular */
+            border-radius: 50%;
             background-size: cover;
             background-position: center;
             cursor: pointer;
@@ -254,7 +233,7 @@
             flex-shrink: 0;
         }
         .avatar-option.selected {
-            border-color: #8A2BE2; /* highlight_effect: neon_purple_glow */
+            border-color: #8A2BE2;
             box-shadow: 0 0 15px #8A2BE2, 0 0 25px #8A2BE2, 0 0 40px rgba(138, 43, 226, 0.7);
             transform: scale(1.05);
         }
@@ -264,11 +243,7 @@
         }
 
         /* --- صفحه بارگذاری --- */
-        #screen-loading {
-            font-size: 1.8rem; /* بزرگ‌تر */
-            color: #FFB800;
-            text-shadow: 0 0 10px #FFB800;
-        }
+        #screen-loading { font-size: 1.8rem; color: #FFB800; text-shadow: 0 0 10px #FFB800; }
 
         /* --- منوی اصلی --- */
         #main-menu-header {
@@ -286,176 +261,193 @@
             background: rgba(255,255,255,0.1);
             border-radius: 30px;
             padding: 5px 15px;
+            cursor: pointer;
         }
         #user-avatar-display {
-            width: 55px; /* بزرگ‌تر */
+            width: 55px;
             height: 55px;
             border-radius: 50%;
             background-size: cover;
             background-position: center;
             border: 3px solid #FFB800;
-            margin-left: 15px; /* فاصله در حالت RTL */
+            margin-left: 15px;
             box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
             flex-shrink: 0;
         }
-        #username-display {
-            font-size: 1.3rem; /* بزرگ‌تر */
-            font-weight: 700;
-            color: #FFFFFF;
-        }
+        #username-display { font-size: 1.3rem; font-weight: 700; color: #FFFFFF; }
+        
         .icon-btn {
-            font-size: 2.2rem; /* بزرگ‌تر */
+            font-size: 2.2rem;
             color: #FFFFFF;
             cursor: pointer;
             transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
             background: none;
             border: none;
             padding: 5px;
-            outline: none; /* حذف outline پیش‌فرض */
-            -webkit-tap-highlight-color: transparent; /* برای موبایل */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .icon-btn:hover {
             transform: rotate(90deg) scale(1.1);
             color: #FFB800;
             text-shadow: 0 0 10px #FFB800;
         }
-        .icon-btn:focus, .icon-btn:active {
-            outline: none;
-            box-shadow: none;
-        }
+        .icon-btn:focus, .icon-btn:active { outline: none; box-shadow: none; }
 
-        #main-menu-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin-top: 80px; /* فاصله از هدر */
-        }
-        #bottom-navigation {
+        /* --- [جدید] منوی آواتار --- */
+        #avatar-menu {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: rgba(10, 10, 20, 0.9); /* bottom_navigation.background_color */
-            display: flex;
-            justify-content: space-around;
-            padding: 15px 0;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+            background-color: rgba(30, 40, 70, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 15px;
+            border: 1px solid #325A9E;
+            padding: 10px;
+            z-index: 110;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .bottom-nav-btn {
+        #avatar-menu.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-10px);
+        }
+        .avatar-menu-btn {
             background: none;
             border: none;
-            color: #E0E0E0;
+            color: #FFF;
             font-family: 'Vazirmatn', sans-serif;
             font-size: 1rem;
+            padding: 12px 20px;
+            width: 100%;
+            text-align: right;
             cursor: pointer;
-            padding: 10px;
-            transition: color 0.3s ease, transform 0.3s ease;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .avatar-menu-btn:hover {
+            background-color: rgba(255, 184, 0, 0.2);
+        }
+
+        /* --- [جدید] نوار اقدام پایین صفحه --- */
+        #bottom-action-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(10, 10, 20, 0.95), rgba(10, 10, 20, 0));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .action-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            outline: none; /* حذف outline پیش‌فرض */
-            -webkit-tap-highlight-color: transparent; /* برای موبایل */
+            background: none;
+            border: none;
+            color: #fff;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            gap: 8px;
+            min-width: 150px;
+            background-color: rgba(40, 50, 90, 0.8);
+            border: 2px solid #325A9E;
         }
-        .bottom-nav-btn:hover {
-            color: #FFB800;
-            transform: translateY(-3px);
+        .action-btn:hover {
+            background-color: #325A9E;
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px #FFB800;
+            border-color: #FFB800;
         }
-        .bottom-nav-btn:focus, .bottom-nav-btn:active {
-            outline: none;
-            box-shadow: none;
-        }
-
-        .bottom-nav-btn span {
-            font-size: 1.8rem; /* برای آیکون‌ها */
-            margin-bottom: 5px;
+        .action-btn .icon {
+            font-size: 2.5rem;
+            line-height: 1;
         }
 
         /* --- پنل‌ها (بازطراحی شده) --- */
         .panel-content {
-            background-color: #1F2A47; /* رنگ آبی تیره یکدست */
-            border: 2px solid #325A9E; /* حاشیه با تم */
+            background-color: #1F2A47;
+            border: 2px solid #325A9E;
             border-radius: 20px;
             padding: 30px;
             width: 95%;
-            max-width: 500px; /* عرض بیشتر */
+            max-width: 500px;
             text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); /* سایه قوی‌تر */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
             position: relative;
-            transform: translateY(0);
-            transition: transform 0.4s ease-in-out;
-            /* استایل‌های گلس‌مورفیسم حذف شد */
         }
         
-        /* اضافه کردن نقطه‌های زرد به پنل‌ها */
-        .panel-content::before,
-        .panel-content::after,
-        .panel-dot {
+        .panel-content::before, .panel-content::after, .panel-dot {
             content: '';
             position: absolute;
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background-color: #FFB800; /* color_palette.primary */
+            background-color: #FFB800;
             box-shadow: 0 0 8px #FFB800;
             z-index: 2;
         }
         
-        .panel-content::before { /* Top-Left */
-            top: 15px;
-            left: 15px;
-        }
-        .panel-content::after { /* Top-Right */
-            top: 15px;
-            right: 15px;
-        }
-        .panel-dot.corner-bottom-left-dot { /* Bottom-Left */
-            bottom: 15px;
-            left: 15px;
-        }
-        .panel-dot.corner-bottom-right-dot { /* Bottom-Right */
-            bottom: 15px;
-            right: 15px;
-        }
-
-        .hidden .panel-content {
-            transform: translateY(100%); /* برای transition: slide_up_fade_in */
-        }
+        .panel-content::before { top: 15px; left: 15px; }
+        .panel-content::after { top: 15px; right: 15px; }
+        .panel-dot.corner-bottom-left-dot { bottom: 15px; left: 15px; }
+        .panel-dot.corner-bottom-right-dot { bottom: 15px; right: 15px; }
         
         .close-panel-btn {
             position: absolute;
             top: 15px;
-            left: 15px; /* دکمه بستن در سمت چپ */
-            font-size: 1.8rem; /* بزرگ‌تر */
+            left: 15px;
+            font-size: 1.8rem;
             line-height: 1;
             color: #FFFFFF;
             cursor: pointer;
             background: rgba(0,0,0,0.4);
             border: none;
             border-radius: 50%;
-            width: 40px; /* بزرگ‌تر */
+            width: 40px;
             height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background 0.3s ease, transform 0.3s ease;
-            outline: none; /* حذف outline پیش‌فرض */
-            -webkit-tap-highlight-color: transparent; /* برای موبایل */
-            z-index: 3; /* باید بالای نقطه‌ها باشد */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 3;
         }
         .close-panel-btn:hover {
             background: rgba(255,0,0,0.6);
             transform: scale(1.1) rotate(90deg);
         }
-        .close-panel-btn:focus, .close-panel-btn:active {
-            outline: none;
-            box-shadow: none;
+        .close-panel-btn:focus, .close-panel-btn:active { outline: none; box-shadow: none; }
+
+        /* --- پنل پروفایل و فروشگاه آواتار --- */
+        .profile-info { text-align: right; margin-top: 20px; }
+        .profile-info p { text-align: right; font-size: 1.2rem; margin-bottom: 15px; }
+        .profile-info span { font-weight: 700; color: #FFB800; margin-right: 10px; }
+        #avatar-store-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding: 10px;
         }
 
         /* حالت‌های بازی جدید */
         #game-modes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* دو ستون در موبایل، بیشتر در دسکتاپ */
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
             margin-top: 30px;
         }
@@ -473,13 +465,13 @@
             position: relative;
             overflow: hidden;
             border: 2px solid transparent;
-            outline: none; /* حذف outline پیش‌فرض */
-            -webkit-tap-highlight-color: transparent; /* برای موبایل */
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .game-mode-card:hover:not(.disabled-mode-card) {
             transform: translateY(-5px) scale(1.03);
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-            background: rgba(138, 43, 226, 0.3); /* color_palette.secondary */
+            background: rgba(138, 43, 226, 0.3);
             border-color: #8A2BE2;
         }
         .game-mode-card:focus, .game-mode-card:active {
@@ -487,271 +479,209 @@
             box-shadow: 0 0 10px #8A2BE2;
             transform: translateY(-5px) scale(1.03);
         }
-        .game-mode-card.active-mode-card {
-            border-color: #FFB800;
-        }
         .game-mode-card.active-mode-card:hover {
-            background: rgba(255, 184, 0, 0.2); /* color_palette.primary */
+            background: rgba(255, 184, 0, 0.2);
             border-color: #FFB800;
         }
-        .game-mode-card .icon {
-            font-size: 3rem; /* آیکون بزرگ‌تر */
-            margin-bottom: 10px;
-            line-height: 1;
-        }
+        .game-mode-card .icon { font-size: 3rem; margin-bottom: 10px; line-height: 1; }
         .game-mode-card h3 {
-            font-family: 'Lalezar', cursive;
-            margin: 0;
-            font-size: 1.4rem;
-            color: #FFFFFF;
+            font-family: 'Lalezar', cursive; margin: 0; font-size: 1.4rem; color: #FFFFFF;
             text-shadow: 0 0 5px rgba(255,255,255,0.5);
         }
         .game-mode-card .status-tag {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #8A2BE2;
-            color: #FFFFFF;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: bold;
+            position: absolute; top: 10px; right: 10px; background-color: #8A2BE2; color: #FFFFFF;
+            padding: 5px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: bold;
         }
         .game-mode-card.disabled-mode-card {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: rgba(50,50,50,0.5);
-            border-color: #555;
+            opacity: 0.5; cursor: not-allowed; background: rgba(50,50,50,0.5); border-color: #555;
         }
-        .game-mode-card.disabled-mode-card .status-tag {
-            background-color: #555;
-        }
+        .game-mode-card.disabled-mode-card .status-tag { background-color: #555; }
 
         /* --- صفحه بازی رپ --- */
-        #rap-game-content {
-            width: 90%;
-            max-width: 550px;
-            text-align: center;
-        }
-        
-        .back-btn {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            font-size: 2.2rem;
-        }
-
+        #rap-game-content { width: 90%; max-width: 550px; text-align: center; }
+        .back-btn { position: absolute; top: 25px; right: 25px; font-size: 2.2rem; }
         #display-lyrics {
-            font-family: 'Vazirmatn', sans-serif;
-            font-size: 1.6rem; /* بزرگ‌تر */
-            font-weight: 700;
-            color: #FFFFFF; /* display_lyrics.color */
-            background: rgba(0,0,0,0.6);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            min-height: 80px; /* ارتفاع بیشتر */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.8;
-            box-shadow: 0 0 15px rgba(255,255,255,0.1);
+            font-family: 'Vazirmatn', sans-serif; font-size: 1.6rem; font-weight: 700; color: #FFFFFF;
+            background: rgba(0,0,0,0.6); padding: 25px; border-radius: 15px; margin-bottom: 25px;
+            min-height: 80px; display: flex; align-items: center; justify-content: center;
+            line-height: 1.8; box-shadow: 0 0 15px rgba(255,255,255,0.1);
         }
         #feedback-message {
-            font-family: 'Lalezar', cursive;
-            font-size: 1.4rem; /* بزرگ‌تر */
-            font-weight: bold;
-            margin: 20px 0;
-            min-height: 30px; /* برای جلوگیری از پرش چیدمان */
-            transition: color 0.3s ease;
+            font-family: 'Lalezar', cursive; font-size: 1.4rem; font-weight: bold; margin: 20px 0;
+            min-height: 30px; transition: color 0.3s ease;
         }
         
-        /* انیمیشن‌های فیدبک */
-        .feedback-success {
-            color: #00FF7F; /* feedback_messages.success.color */
-            animation: glow 1s ease-in-out forwards;
-        }
-        .feedback-failure {
-            color: #FF4444; /* feedback_messages.failure.color */
-            animation: shake 0.5s ease-in-out;
-        }
+        .feedback-success { color: #00FF7F; animation: glow 1s ease-in-out forwards; }
+        .feedback-failure { color: #FF4444; animation: shake 0.5s ease-in-out; }
         
         @keyframes glow {
-            0% { text-shadow: 0 0 5px #00FF7F, 0 0 0px #00FF7F; }
+            0%, 100% { text-shadow: 0 0 5px #00FF7F, 0 0 0px #00FF7F; }
             50% { text-shadow: 0 0 20px #00FF7F, 0 0 10px #00FF7F; }
-            100% { text-shadow: 0 0 5px #00FF7F, 0 0 0px #00FF7F; }
         }
         @keyframes shake {
-            0%, 20%, 40%, 60%, 80%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-            20%, 40%, 60%, 80% { transform: translateX(8px); }
+            0%, 100% { transform: translateX(0); } 10%, 50%, 90% { transform: translateX(-8px); } 30%, 70% { transform: translateX(8px); }
         }
 
         /* --- پیام Toast --- */
         #message-toast {
-            position: fixed;
-            bottom: -100px; /* شروع از خارج صفحه */
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #FFB800; /* color_palette.primary */
-            color: #111;
-            padding: 15px 30px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            z-index: 200;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: bottom 0.4s ease-in-out;
-            font-family: 'Vazirmatn', sans-serif;
-            text-align: center;
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background-color: #FFB800; color: #111; padding: 15px 30px; border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 200; font-size: 1.1rem; font-weight: bold;
+            transition: bottom 0.4s ease-in-out; font-family: 'Vazirmatn', sans-serif; text-align: center;
         }
-        #message-toast.show {
-            bottom: 50px; /* بالاتر از قبل */
-        }
+        #message-toast.show { bottom: 50px; }
     </style>
 </head>
 <body>
 
-    <!-- پس‌زمینه اصلی --><div class="background-image"></div>
+    <div class="background-image"></div>
 
-    <!-- 1. صفحه ثبت‌نام --><div id="screen-register" class="screen">
-        
-        <div class="avatar-selection" id="avatar-container" style="margin-top: 20px; margin-bottom: 20px;">
-            <!-- آواتارها به صورت داینامیک اضافه می‌شوند --></div>
-        
+    <!-- 1. صفحه ثبت‌نام -->
+    <div id="screen-register" class="screen">
+        <div class="avatar-selection" id="avatar-container"></div>
         <div class="input-wrapper">
             <input type="text" id="username-input" class="input-field" placeholder="اسم رپر خودتو بنویس...">
-            <span class="corner-dot corner-bottom-left-dot"></span>
-            <span class="corner-dot corner-bottom-right-dot"></span>
+            <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
         </div>
         <div class="input-wrapper">
             <input type="number" id="age-input" class="input-field" placeholder="سن شما">
-            <span class="corner-dot corner-bottom-left-dot"></span>
-            <span class="corner-dot corner-bottom-right-dot"></span>
+            <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
         </div>
         <div class="input-wrapper">
             <input type="password" id="password-input" class="input-field" placeholder="رمز عبور">
-            <span class="corner-dot corner-bottom-left-dot"></span>
-            <span class="corner-dot corner-bottom-right-dot"></span>
+            <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
         </div>
         <div class="input-wrapper">
             <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
-            <span class="corner-dot corner-bottom-left-dot"></span>
-            <span class="corner-dot corner-bottom-right-dot"></span>
+            <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
         </div>
-        
-        <button id="register-btn" class="btn" style="margin-top: 20px;">
-            ثبت نام
-        </button>
+        <button id="register-btn" class="btn" style="margin-top: 20px;">ثبت نام</button>
     </div>
 
-    <!-- 2. صفحه بارگذاری --><div id="screen-loading" class="screen hidden">
+    <!-- 2. صفحه بارگذاری -->
+    <div id="screen-loading" class="screen hidden">
         <div id="loading-text">در حال اتصال به صحنه‌ی رپ...</div>
-        <!-- انیمیشن 'graffiti_spray_fade' پیچیده است و با CSS خالص پیاده‌سازی نشده است --></div>
+    </div>
 
-    <!-- 3. منوی اصلی --><div id="screen-main-menu" class="screen hidden">
+    <!-- 3. منوی اصلی -->
+    <div id="screen-main-menu" class="screen hidden">
         <div id="main-menu-header">
-            <button id="settings-btn" class="icon-btn">⚙️</button> <!-- icon: gear --><div class="user-info">
+            <button id="settings-btn" class="icon-btn">⚙️</button>
+            <div class="user-info" id="user-info-header">
                 <span id="username-display"></span>
                 <div id="user-avatar-display"></div>
             </div>
         </div>
         
-        <div id="main-menu-buttons">
-            <button id="start-flow-btn" class="btn">
-                شروع فلو
+        <!-- [جدید] منوی کشویی آواتار -->
+        <div id="avatar-menu" class="hidden">
+            <button class="avatar-menu-btn" id="profile-btn">
+                <span>👤</span> پروفایل
             </button>
-            <button id="online-beat-btn" class="btn">
-                بیت آنلاین
+            <button class="avatar-menu-btn" id="avatar-store-btn">
+                <span>🎭</span> فروشگاه آواتار
             </button>
         </div>
-        
-        <div id="bottom-navigation">
-            <button class="bottom-nav-btn" data-message="مسیرها (به زودی...)"><span>🗺️</span>مسیرها</button>
-            <button class="bottom-nav-btn" data-message="چالش‌ها (به زودی...)"><span>🏆</span>چالش‌ها</button>
-            <button class="bottom-nav-btn" data-message="فروشگاه (به زودی...)"><span>🛒</span>فروشگاه</button>
+
+        <!-- [جدید] نوار اقدام پایین -->
+        <div id="bottom-action-bar">
+            <button id="online-beat-btn" class="action-btn">
+                <span class="icon">🎵</span>
+                بیت آنلاین
+            </button>
+            <button id="start-flow-btn" class="action-btn">
+                <span class="icon">🎤</span>
+                شروع فلو
+            </button>
         </div>
     </div>
     
-    <!-- 4. صفحه بازی رپ --><div id="screen-rap-game" class="screen hidden">
+    <!-- 4. صفحه بازی رپ -->
+    <div id="screen-rap-game" class="screen hidden">
         <button id="game-back-btn" class="icon-btn back-btn">⬅️</button>
         <div id="rap-game-content">
             <h2>تکمیل تکس</h2>
             <p>یه خط از تکس نمایش داده میشه، باید خط بعدی رو طوری بگی که باهاش هم‌قافیه باشه و فلو حفظ بشه.</p>
-            
             <div id="display-lyrics">...</div>
             <div id="feedback-message"></div>
-            
             <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنویس...">
-            <button id="submit-rap-btn" class="btn">
-                بفرست
-            </button>
-            <button id="next-rap-btn" class="btn btn-secondary hidden">
-                تکس بعدی
-            </button>
+            <button id="submit-rap-btn" class="btn">بفرست</button>
+            <button id="next-rap-btn" class="btn btn-secondary hidden">تکس بعدی</button>
         </div>
     </div>
 
-
-    <!-- پنل‌ها --><!-- 5. پنل تنظیمات --><div id="panel-settings" class="panel hidden panel-slide-up">
+    <!-- پنل‌ها -->
+    <!-- 5. پنل تنظیمات -->
+    <div id="panel-settings" class="panel hidden">
         <div class="panel-content">
-            <button class="close-panel-btn" data-panel="panel-settings">X</button>
+            <button class="close-panel-btn" data-panel="settings">X</button>
             <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
             <h2>تنظیمات ایران رپ</h2>
-            <button class="btn" data-message="کد هدیه (به زودی...)">
-                کد هدیه
-            </button>
-            <button class="btn" data-message="سازندگان (به زودی...)">
-                سازندگان
-            </button>
-            <button class="btn" data-message="پشتیبانی (به زودی...)">
-                پشتیبانی
-            </button>
+            <button class="btn" data-message="کد هدیه (به زودی...)">کد هدیه</button>
+            <button class="btn" data-message="سازندگان (به زودی...)">سازندگان</button>
+            <button class="btn" data-message="پشتیبانی (به زودی...)">پشتیبانی</button>
         </div>
     </div>
     
-    <!-- 6. پنل حالت‌های بازی (کاملاً بازسازی شده) --><div id="panel-game-modes" class="panel hidden panel-slide-up">
+    <!-- 6. پنل حالت‌های بازی -->
+    <div id="panel-game-modes" class="panel hidden">
         <div class="panel-content">
-            <button class="close-panel-btn" data-panel="panel-game-modes">X</button>
+            <button class="close-panel-btn" data-panel="gameModes">X</button>
             <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
             <h2>نوع چالش خودت رو انتخاب کن</h2>
-            
             <div id="game-modes-grid">
-                <div class="game-mode-card disabled-mode-card" data-message="فلو سوال (به زودی...)">
-                    <span class="icon">❓</span>
-                    <h3>فلو سوال</h3>
-                    <span class="status-tag">به زودی</span>
-                </div>
-                <div class="game-mode-card disabled-mode-card" data-message="تکس رندوم (به زودی...)">
-                    <span class="icon">🎲</span>
-                    <h3>تکس رندوم</h3>
-                    <span class="status-tag">به زودی</span>
-                </div>
-                <div id="start-rap-game-card" class="game-mode-card active-mode-card">
-                    <span class="icon">✍️</span>
-                    <h3>تکمیل تکس</h3>
-                    <span class="status-tag">فعال</span>
-                </div>
+                <div class="game-mode-card disabled-mode-card" data-message="فلو سوال (به زودی...)"><span class="icon">❓</span><h3>فلو سوال</h3><span class="status-tag">به زودی</span></div>
+                <div class="game-mode-card disabled-mode-card" data-message="تکس رندوم (به زودی...)"><span class="icon">🎲</span><h3>تکس رندوم</h3><span class="status-tag">به زودی</span></div>
+                <div id="start-rap-game-card" class="game-mode-card"><span class="icon">✍️</span><h3>تکمیل تکس</h3><span class="status-tag">فعال</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. [جدید] پنل پروفایل -->
+    <div id="panel-profile" class="panel hidden">
+        <div class="panel-content">
+            <button class="close-panel-btn" data-panel="profile">X</button>
+            <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
+            <h2>پروفایل رپر</h2>
+            <div class="profile-info">
+                <p>نام کاربری: <span id="profile-username"></span></p>
+                <p>سن: <span id="profile-age"></span></p>
+                <p>تعداد آواتارها: <span id="profile-avatar-count"></span></p>
+                <p>تعداد بازی انجام شده: <span id="profile-games-played"></span></p>
+                <p>ساعت بازی: <span id="profile-play-time"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. [جدید] پنل فروشگاه آواتار -->
+    <div id="panel-avatar-store" class="panel hidden">
+        <div class="panel-content">
+            <button class="close-panel-btn" data-panel="avatarStore">X</button>
+            <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
+            <h2>فروشگاه آواتار</h2>
+            <p>آواتار جدیدت رو انتخاب کن</p>
+            <div id="avatar-store-grid">
+                <!-- آواتارهای فروشگاه به صورت داینامیک اینجا اضافه می‌شوند -->
             </div>
         </div>
     </div>
     
-    <!-- عنصر پیام Toast --><div id="message-toast" class=""></div>
+    <div id="message-toast"></div>
 
     <script>
-        // --- داده‌های JSON شبیه‌سازی شده ---
-        // (این داده‌ها مستقیماً از درخواست شما گرفته شده‌اند)
         const config = {
             assets: {
                 avatars: [
                     "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۹۴۷_z6u.png",
-                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۷۴۳_lrn9.png"
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۷۴۳_lrn9.png",
+                    "https://i.pravatar.cc/150?img=1",
+                    "https://i.pravatar.cc/150?img=5",
+                    "https://i.pravatar.cc/150?img=8",
+                    "https://i.pravatar.cc/150?img=12"
                 ]
             },
             screens: {
-                loading: {
-                    duration_seconds: 2
-                },
+                loading: { duration_seconds: 2 },
                 rap_game: {
                     feedback_messages: {
                         success: "دمت گرم! قافیه فِت بود",
@@ -761,46 +691,24 @@
             }
         };
 
-        // --- چالش‌های بازی (شبیه‌سازی شده) ---
-        // برای بررسی قافیه، ما آخرین کلمه را با لیست قافیه‌های مجاز مقایسه می‌کنیم
-        // لیستی از آخرین کلمه‌ها و قافیه‌های متناظر
         const rapChallenges = [
-            { 
-                line: "دوباره شب شد و من بیدار...", 
-                rhymes: ["بیمار", "سیگار", "دیدار", "دیوار", "بیکار", "تکرار"] 
-            },
-            { 
-                line: "کلمه‌ها رو میذارم کنار هم با دقت...", 
-                rhymes: ["سرعت", "وقت", "نفرت", "رقت", "کیفیت", "قسمت"] 
-            },
-            { 
-                line: "اینجا تهرانه یعنی شهر هزار رنگ...", 
-                rhymes: ["جنگ", "سنگ", "تنگ", "پلنگ", "قشنگ", "تفنگ"] 
-            },
-            {
-                line: "میگه حالش بده، حالم از اون بدتره...",
-                rhymes: ["دفتره", "سرتره", "بهتره", "اوله", "اینور", "اونور"]
-            },
-            {
-                line: "تکسامو مینویسم روی بیت...",
-                rhymes: ["لیست", "ایست", "چیست", "زیست", "ریسک", "نیست"]
-            },
-            {
-                line: "حرفامو میزنم با قدرت و صراحت...",
-                rhymes: ["راحت", "استراحت", "صداقت", "تجارت", "عبادت"]
-            }
+            { line: "دوباره شب شد و من بیدار...", rhymes: ["بیمار", "سیگار", "دیدار", "دیوار", "بیکار", "تکرار"] },
+            { line: "کلمه‌ها رو میذارم کنار هم با دقت...", rhymes: ["سرعت", "وقت", "نفرت", "رقت", "کیفیت", "قسمت"] },
+            { line: "اینجا تهرانه یعنی شهر هزار رنگ...", rhymes: ["جنگ", "سنگ", "تنگ", "پلنگ", "قشنگ", "تفنگ"] },
+            { line: "میگه حالش بده، حالم از اون بدتره...", rhymes: ["دفتره", "سرتره", "بهتره", "اوله", "اینور", "اونور"] }
         ];
         let currentChallenge;
         let usedChallengeIndices = [];
 
-        // --- وضعیت برنامه ---
         const state = {
             username: '',
-            avatar: config.assets.avatars[0], // انتخاب پیش‌فرض
+            age: 0,
+            avatar: config.assets.avatars[0],
             userId: '',
+            gamesPlayed: 0,
+            playTime: 0 // In seconds
         };
 
-        // --- انتخابگرهای DOM ---
         const dom = {
             screens: {
                 register: document.getElementById('screen-register'),
@@ -811,6 +719,8 @@
             panels: {
                 settings: document.getElementById('panel-settings'),
                 gameModes: document.getElementById('panel-game-modes'),
+                profile: document.getElementById('panel-profile'),
+                avatarStore: document.getElementById('panel-avatar-store'),
             },
             register: {
                 avatarContainer: document.getElementById('avatar-container'),
@@ -822,11 +732,14 @@
             },
             mainMenu: {
                 settingsBtn: document.getElementById('settings-btn'),
+                userInfoHeader: document.getElementById('user-info-header'),
                 usernameDisplay: document.getElementById('username-display'),
                 avatarDisplay: document.getElementById('user-avatar-display'),
+                avatarMenu: document.getElementById('avatar-menu'),
+                profileBtn: document.getElementById('profile-btn'),
+                avatarStoreBtn: document.getElementById('avatar-store-btn'),
                 startFlowBtn: document.getElementById('start-flow-btn'),
                 onlineBeatBtn: document.getElementById('online-beat-btn'),
-                bottomNavButtons: document.querySelectorAll('.bottom-nav-btn'),
             },
             rapGame: {
                 displayLyrics: document.getElementById('display-lyrics'),
@@ -840,206 +753,157 @@
                 startRapGameCard: document.getElementById('start-rap-game-card'),
                 disabledModeCards: document.querySelectorAll('.disabled-mode-card'),
             },
+            profilePanel: {
+                username: document.getElementById('profile-username'),
+                age: document.getElementById('profile-age'),
+                avatarCount: document.getElementById('profile-avatar-count'),
+                gamesPlayed: document.getElementById('profile-games-played'),
+                playTime: document.getElementById('profile-play-time'),
+            },
+            avatarStore: {
+                grid: document.getElementById('avatar-store-grid'),
+            },
             closePanelBtns: document.querySelectorAll('.close-panel-btn'),
             messageToast: document.getElementById('message-toast'),
             buttonsWithMessages: document.querySelectorAll('[data-message]'),
         };
 
-        // --- توابع اصلی ---
-
-        /**
-         * نمایش یک صفحه خاص و پنهان کردن بقیه
-         * @param {string} screenId - شناسه‌ی صفحه‌ای که باید نمایش داده شود
-         */
         function showScreen(screenId) {
-            Object.values(dom.screens).forEach(screen => {
-                screen.classList.add('hidden');
-            });
-            if (dom.screens[screenId]) {
-                dom.screens[screenId].classList.remove('hidden');
-            } else {
-                console.error("Screen not found:", screenId);
-            }
+            Object.values(dom.screens).forEach(screen => screen.classList.add('hidden'));
+            if (dom.screens[screenId]) dom.screens[screenId].classList.remove('hidden');
         }
 
-        /**
-         * نمایش یک پنل
-         * @param {string} panelId - شناسه‌ی پنلی که باید نمایش داده شود
-         */
         function showPanel(panelId) {
-            if (dom.panels[panelId]) {
-                dom.panels[panelId].classList.remove('hidden');
-                dom.panels[panelId].classList.remove('panel-slide-up'); // حذف برای نمایش
-            } else {
-                console.error("Panel not found:", panelId);
-            }
+            if (dom.panels[panelId]) dom.panels[panelId].classList.remove('hidden');
         }
 
-        /**
-         * پنهان کردن یک پنل
-         * @param {string} panelId - شناسه‌ی پنلی که باید پنهان شود
-         */
         function hidePanel(panelId) {
-            if (dom.panels[panelId]) {
-                dom.panels[panelId].classList.add('hidden');
-                dom.panels[panelId].classList.add('panel-slide-up'); // اضافه برای انیمیشن
-            } else {
-                console.error("Panel not found:", panelId);
-            }
+            if (dom.panels[panelId]) dom.panels[panelId].classList.add('hidden');
+        }
+        
+        function hideAllPanels() {
+            Object.values(dom.panels).forEach(panel => panel.classList.add('hidden'));
         }
 
-        /**
-         * نمایش یک پیام toast
-         * @param {string} message - متنی که باید نمایش داده شود
-         */
         function showMessage(message) {
-            const toast = dom.messageToast;
-            toast.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2500); // پیام بعد از ۲.۵ ثانیه محو می‌شود
+            dom.messageToast.textContent = message;
+            dom.messageToast.classList.add('show');
+            setTimeout(() => dom.messageToast.classList.remove('show'), 2500);
         }
 
-        /**
-         * تولید یک ID تصادفی
-         * @param {number} length - طول ID
-         * @returns {string} - ID تصادفی
-         */
         function generateRandomId(length) {
             const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
             return result;
         }
 
-        /**
-         * بارگذاری آواتارها در صفحه ثبت‌نام
-         */
-        function loadAvatars() {
-            config.assets.avatars.forEach((avatarUrl, index) => {
-                const avatarDiv = document.createElement('div');
-                avatarDiv.classList.add('avatar-option');
-                avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
-                avatarDiv.dataset.url = avatarUrl;
-                
-                // تصویر جایگزین در صورت خطا
-                avatarDiv.onerror = () => { 
-                    avatarDiv.style.backgroundImage = `url('https://placehold.co/80x80/8A2BE2/FFFFFF?text=Rapper')`;
-                };
+        function createAvatarElement(avatarUrl, onClickCallback) {
+            const avatarDiv = document.createElement('div');
+            avatarDiv.classList.add('avatar-option');
+            avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
+            avatarDiv.dataset.url = avatarUrl;
+            avatarDiv.addEventListener('click', () => onClickCallback(avatarUrl, avatarDiv));
+            return avatarDiv;
+        }
 
-                if (index === 0) {
-                    avatarDiv.classList.add('selected'); // انتخاب اولین آواتار به عنوان پیش‌فرض
-                }
-                
-                avatarDiv.addEventListener('click', () => {
-                    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
-                    avatarDiv.classList.add('selected');
-                    state.avatar = avatarUrl;
+        function loadAvatarsForRegister() {
+            dom.register.avatarContainer.innerHTML = '';
+            config.assets.avatars.forEach((avatarUrl, index) => {
+                const avatarDiv = createAvatarElement(avatarUrl, (url, element) => {
+                    document.querySelectorAll('#avatar-container .avatar-option').forEach(el => el.classList.remove('selected'));
+                    element.classList.add('selected');
+                    state.avatar = url;
                 });
-                
+                if (index === 0) avatarDiv.classList.add('selected');
                 dom.register.avatarContainer.appendChild(avatarDiv);
             });
         }
         
-        /**
-         * تنظیم اطلاعات کاربر در منوی اصلی
-         */
+        function loadAvatarsToStore() {
+            dom.avatarStore.grid.innerHTML = '';
+            config.assets.avatars.forEach(avatarUrl => {
+                const avatarDiv = createAvatarElement(avatarUrl, (url, element) => {
+                    state.avatar = url;
+                    setupMainMenu();
+                    document.querySelectorAll('#avatar-store-grid .avatar-option').forEach(el => el.classList.remove('selected'));
+                    element.classList.add('selected');
+                    showMessage("آواتار شما تغییر کرد!");
+                    setTimeout(() => hidePanel('avatarStore'), 500);
+                });
+                if (avatarUrl === state.avatar) avatarDiv.classList.add('selected');
+                dom.avatarStore.grid.appendChild(avatarDiv);
+            });
+        }
+        
         function setupMainMenu() {
             dom.mainMenu.usernameDisplay.textContent = state.username;
             dom.mainMenu.avatarDisplay.style.backgroundImage = `url(${state.avatar})`;
-            dom.mainMenu.avatarDisplay.onerror = () => {
-                dom.mainMenu.avatarDisplay.style.backgroundImage = `url('https://placehold.co/55x55/8A2BE2/FFFFFF?text=${state.username.charAt(0)}')`;
-            };
         }
         
-        /**
-         * بارگذاری یک چالش رپ جدید
-         */
-        function loadChallenge() {
-            if (usedChallengeIndices.length === rapChallenges.length) {
-                usedChallengeIndices = []; // ریست کردن اگر همه‌ی چالش‌ها استفاده شدند
-            }
+        function setupProfilePanel() {
+            dom.profilePanel.username.textContent = state.username;
+            dom.profilePanel.age.textContent = state.age;
+            dom.profilePanel.avatarCount.textContent = config.assets.avatars.length;
+            dom.profilePanel.gamesPlayed.textContent = state.gamesPlayed;
+            const minutes = Math.floor(state.playTime / 60);
+            const seconds = state.playTime % 60;
+            dom.profilePanel.playTime.textContent = `${minutes} دقیقه و ${seconds} ثانیه`;
+        }
 
+        function loadChallenge() {
+            if (usedChallengeIndices.length === rapChallenges.length) usedChallengeIndices = [];
             let newIndex;
             do {
                 newIndex = Math.floor(Math.random() * rapChallenges.length);
             } while (usedChallengeIndices.includes(newIndex));
-            
             usedChallengeIndices.push(newIndex);
             currentChallenge = rapChallenges[newIndex];
             
             dom.rapGame.displayLyrics.textContent = currentChallenge.line;
             dom.rapGame.rapInput.value = '';
             dom.rapGame.feedbackMessage.textContent = '';
-            dom.rapGame.feedbackMessage.className = ''; // ریست کردن کلاس‌ها
+            dom.rapGame.feedbackMessage.className = 'feedback-message';
             dom.rapGame.nextRapBtn.classList.add('hidden');
             dom.rapGame.submitRapBtn.classList.remove('hidden');
             dom.rapGame.rapInput.disabled = false;
             dom.rapGame.rapInput.focus();
         }
         
-        /**
-         * بررسی قافیه ارسالی توسط کاربر
-         */
         function checkRhyme() {
             const userInput = dom.rapGame.rapInput.value.trim();
-            if (!userInput) {
-                showMessage("اول باید یه چیزی بنویسی!");
-                return;
-            }
+            if (!userInput) return showMessage("اول باید یه چیزی بنویسی!");
             
-            // پیدا کردن آخرین کلمه (ساده‌سازی شده)
-            // حذف علائم نگارشی و یکسان‌سازی حروف برای مقایسه بهتر
             const lastWord = userInput.split(' ').pop().replace(/[.,!؟،؛]/g, '').toLowerCase(); 
             const feedbackMsg = dom.rapGame.feedbackMessage;
             
             if (currentChallenge.rhymes.includes(lastWord)) {
-                // موفقیت
                 feedbackMsg.textContent = config.screens.rap_game.feedback_messages.success;
-                feedbackMsg.classList.remove('feedback-failure');
-                feedbackMsg.classList.add('feedback-success');
+                feedbackMsg.className = 'feedback-message feedback-success';
                 dom.rapGame.nextRapBtn.classList.remove('hidden');
                 dom.rapGame.submitRapBtn.classList.add('hidden');
                 dom.rapGame.rapInput.disabled = true;
+                state.gamesPlayed++; // Increment games played on success
             } else {
-                // شکست
                 feedbackMsg.textContent = config.screens.rap_game.feedback_messages.failure;
-                feedbackMsg.classList.remove('feedback-success');
-                feedbackMsg.classList.add('feedback-failure');
+                feedbackMsg.className = 'feedback-message feedback-failure';
             }
         }
         
-        
-        // --- مدیریت رویدادها ---
-        
-        // اجرای اولیه پس از بارگذاری کامل DOM
         document.addEventListener('DOMContentLoaded', () => {
-            loadAvatars();
+            loadAvatarsForRegister();
             
-            // رویداد دکمه ثبت‌نام
             dom.register.registerBtn.addEventListener('click', () => {
                 const username = dom.register.usernameInput.value.trim();
                 const age = dom.register.ageInput.value;
                 const password = dom.register.passwordInput.value;
-                const confirmPassword = dom.register.confirmPasswordInput.value;
                 
-                if (!username || !age || !password || !confirmPassword) {
-                    showMessage("لطفاً همه‌ی فیلدها رو پر کن.");
-                    return;
-                }
+                if (!username || !age || !password) return showMessage("لطفاً همه‌ی فیلدها رو پر کن.");
+                if (password !== dom.register.confirmPasswordInput.value) return showMessage("رمزهای عبور با هم مطابقت ندارن.");
                 
-                if (password !== confirmPassword) {
-                    showMessage("رمزهای عبور با هم مطابقت ندارن.");
-                    return;
-                }
-                
-                // ذخیره اطلاعات و ادامه
                 state.username = username;
-                state.userId = generateRandomId(6); // random_id_generation
+                state.age = age;
+                state.userId = generateRandomId(6);
                 
                 showScreen('loading');
                 
@@ -1049,23 +913,36 @@
                 }, config.screens.loading.duration_seconds * 1000);
             });
             
-            // رویدادهای منوی اصلی
             dom.mainMenu.settingsBtn.addEventListener('click', () => showPanel('settings'));
             dom.mainMenu.startFlowBtn.addEventListener('click', () => showPanel('gameModes'));
             dom.mainMenu.onlineBeatBtn.addEventListener('click', () => showMessage('بیت آنلاین (به زودی...)'));
-            
-            dom.mainMenu.bottomNavButtons.forEach(btn => {
-                btn.addEventListener('click', () => showMessage(btn.dataset.message));
+
+            dom.mainMenu.userInfoHeader.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const rect = dom.mainMenu.userInfoHeader.getBoundingClientRect();
+                dom.mainMenu.avatarMenu.style.top = `${rect.bottom + 10}px`;
+                dom.mainMenu.avatarMenu.style.right = `${window.innerWidth - rect.right}px`;
+                dom.mainMenu.avatarMenu.classList.toggle('hidden');
             });
             
-            // رویدادهای پنل‌ها
+            dom.mainMenu.profileBtn.addEventListener('click', () => {
+                setupProfilePanel();
+                showPanel('profile');
+                dom.mainMenu.avatarMenu.classList.add('hidden');
+            });
+
+            dom.mainMenu.avatarStoreBtn.addEventListener('click', () => {
+                loadAvatarsToStore();
+                showPanel('avatarStore');
+                dom.mainMenu.avatarMenu.classList.add('hidden');
+            });
+
             dom.closePanelBtns.forEach(btn => {
                 btn.addEventListener('click', () => hidePanel(btn.dataset.panel));
             });
             
-            // رویدادهای حالت‌های بازی
             dom.gameModes.startRapGameCard.addEventListener('click', () => {
-                hidePanel('gameModes');
+                hideAllPanels();
                 loadChallenge();
                 showScreen('rapGame');
             });
@@ -1074,21 +951,34 @@
                 card.addEventListener('click', () => showMessage(card.dataset.message));
             });
             
-            // رویدادهای صفحه بازی
             dom.rapGame.submitRapBtn.addEventListener('click', checkRhyme);
             dom.rapGame.nextRapBtn.addEventListener('click', loadChallenge);
-            dom.rapGame.gameBackBtn.addEventListener('click', () => showScreen('mainMenu'));
+            dom.rapGame.gameBackBtn.addEventListener('click', () => {
+                hideAllPanels();
+                showScreen('mainMenu');
+            });
             
-            // اجازه ارسال با Enter
-            dom.rapGame.rapInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault(); // جلوگیری از ارسال فرم پیش‌فرض
-                    checkRhyme();
+            dom.rapGame.rapInput.addEventListener('keypress', e => {
+                if (e.key === 'Enter') { e.preventDefault(); checkRhyme(); }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!dom.mainMenu.avatarMenu.classList.contains('hidden') && !dom.mainMenu.userInfoHeader.contains(e.target)) {
+                    dom.mainMenu.avatarMenu.classList.add('hidden');
                 }
             });
+            
+            dom.buttonsWithMessages.forEach(btn => {
+                btn.addEventListener('click', () => showMessage(btn.dataset.message));
+            });
+            
+            // Track play time
+            setInterval(() => {
+                if(!dom.screens.rapGame.classList.contains('hidden')) {
+                    state.playTime++;
+                }
+            }, 1000);
         });
-        
     </script>
-
 </body>
 </html>
