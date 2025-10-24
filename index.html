@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایران رپ</title>
+    
+    <!-- 
+      درخواست شما فونت 'IranGraffiti' را مشخص کرده بود.
+      از آنجایی که این یک فونت سفارشی است، ما از 'Vazirmatn' به عنوان یک فونت فارسی با کیفیت بالا و خوانا استفاده می‌کنیم.
+    -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- تنظیمات پایه --- */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #111;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* --- پس‌زمینه --- */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://s6.uupload.ir/files/inshot_۲۰۲۵۱۰۲۳_۲۰۱۷۳۵۴۰۹_6z89.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            filter: blur(5px); /* effects.blur_background */
+            transform: scale(1.1);
+        }
+
+        /* --- مدیریت صفحات و پنل‌ها --- */
+        .screen, .panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out; /* transitions.default */
+            z-index: 10;
+        }
+
+        .panel {
+            background-color: rgba(20, 20, 20, 0.75); /* color_palette.panel_background */
+            backdrop-filter: blur(10px); /* effects.blur_background */
+            z-index: 100;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* --- عناصر UI سفارشی --- */
+        .btn {
+            background-color: #325A9E; /* button_style.background_color */
+            color: #FFFFFF; /* button_style.text_color */
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-family: 'Vazirmatn', sans-serif;
+            border-radius: 30px; /* button_style.shape: rounded_large */
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4); /* button_style.shadow */
+            transition: all 0.3s ease-in-out; /* effects.hover_transition */
+            margin: 10px;
+            min-width: 200px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            /* effects.hover_effect: soft_glow */
+            box-shadow: 0 0 15px #325A9E, 0 0 25px #325A9E, 0 2px 5px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+        }
+        
+        /* دکمه رنگ ثانویه */
+        .btn-secondary {
+            background-color: #8A2BE2; /* color_palette.secondary */
+        }
+        .btn-secondary:hover {
+             box-shadow: 0 0 15px #8A2BE2, 0 0 25px #8A2BE2, 0 2px 5px rgba(0,0,0,0.4);
+        }
+
+        .input-field {
+            background-color: #3C609E; /* input_style.background_color */
+            color: #FFFFFF; /* input_style.text_color */
+            border: 1px solid #325A9E;
+            padding: 12px;
+            width: 80%;
+            max-width: 300px;
+            margin: 10px 0;
+            border-radius: 8px; /* input_style.border_radius */
+            font-size: 1rem;
+            font-family: 'Vazirmatn', sans-serif;
+            text-align: center; /* alignment: center */
+        }
+
+        .input-field::placeholder {
+            color: #C0C0C0; /* input_style.placeholder_color */
+            opacity: 1;
+        }
+
+        h1, h2 {
+            color: #FFB800; /* color_palette.primary */
+            text-shadow: 0 0 10px #FFB800, 0 0 5px #FFB800; /* effects.glow: neon */
+            margin-top: 0;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* --- صفحه ثبت‌نام --- */
+        #screen-register h1 {
+            font-size: 2rem;
+        }
+        
+        .avatar-selection {
+            display: flex;
+            justify-content: center; /* layout: horizontal */
+            margin: 20px 0;
+        }
+        .avatar-option {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%; /* style: circular */
+            background-size: cover;
+            background-position: center;
+            margin: 0 15px;
+            cursor: pointer;
+            border: 4px solid transparent;
+            transition: all 0.3s ease-in-out;
+        }
+        .avatar-option.selected {
+            border-color: #8A2BE2; /* highlight_effect: neon_purple_glow */
+            box-shadow: 0 0 15px #8A2BE2, 0 0 25px #8A2BE2;
+        }
+
+        /* --- صفحه بارگذاری --- */
+        #screen-loading {
+            font-size: 1.5rem;
+            color: #FFB800;
+        }
+
+        /* --- منوی اصلی --- */
+        #main-menu-header {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        #user-avatar-display {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-size: cover;
+            border: 2px solid #FFB800;
+            margin-left: 10px; /* فاصله در حالت RTL */
+        }
+        #username-display {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .icon-btn {
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+            background: none;
+            border: none;
+        }
+        .icon-btn:hover {
+            transform: rotate(90deg);
+            color: #FFB800;
+        }
+        #main-menu-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        #bottom-navigation {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 20, 0.8); /* bottom_navigation.background_color */
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .bottom-nav-btn {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-family: 'Vazirmatn', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            padding: 10px;
+        }
+        .bottom-nav-btn:hover {
+            color: #FFB800;
+        }
+
+        /* --- پنل‌ها (تنظیمات، حالت‌های بازی) --- */
+        .panel-content {
+            /* style: glassmorphic_dark */
+            background: rgba(40, 40, 40, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+        }
+        
+        .close-panel-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px; /* دکمه بستن در سمت چپ */
+            font-size: 1.5rem;
+            line-height: 1;
+            color: white;
+            cursor: pointer;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+        }
+        .close-panel-btn:hover {
+            background: rgba(255,0,0,0.5);
+        }
+
+        /* حالت‌های بازی */
+        .mode-option {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .mode-option h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .mode-option .status {
+            font-size: 0.9rem;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status-soon {
+            background-color: #555;
+            color: #ccc;
+        }
+        .status-active {
+            background-color: #00FF7F;
+            color: #111;
+        }
+        .mode-option.active-mode:hover {
+            background: rgba(138, 43, 226, 0.5); /* #8A2BE2 با شفافیت */
+        }
+        .mode-option.disabled-mode {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* --- صفحه بازی رپ --- */
+        #rap-game-content {
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            font-size: 1.5rem;
+        }
+
+        #display-lyrics {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #FFFFFF; /* display_lyrics.color */
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 50px;
+            line-height: 1.6;
+        }
+        #feedback-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 15px 0;
+            height: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        /* انیمیشن‌های فیدبک */
+        .feedback-success {
+            color: #00FF7F; /* feedback_messages.success.color */
+            animation: glow 1s ease-in-out;
+        }
+        .feedback-failure {
+            color: #FF4444; /* feedback_messages.failure.color */
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px #00FF7F; }
+            50% { text-shadow: 0 0 20px #00FF7F; }
+        }
+        @keyframes shake {
+            0%, 25% { transform: translateX(0); }
+            30% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            50%, 100% { transform: translateX(0); }
+        }
+
+        /* --- پیام Toast --- */
+        #message-toast {
+            position: fixed;
+            bottom: -100px; /* شروع از خارج صفحه */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFB800; /* color_palette.primary */
+            color: #111;
+            padding: 15px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 200;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: bottom 0.4s ease-in-out;
+        }
+        #message-toast.show {
+            bottom: 20%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- پس‌زمینه اصلی -->
+    <div class="background-image"></div>
+
+    <!-- 1. صفحه ثبت‌نام -->
+    <div id="screen-register" class="screen">
+        <h1>{{ screens.register.title }}</h1>
+        <p>{{ screens.register.description }}</p>
+
+        <div class="avatar-selection" id="avatar-container">
+            <!-- آواتارها به صورت داینامیک اضافه می‌شوند -->
+        </div>
+        
+        <input type="text" id="username-input" class="input-field" placeholder="اسم رپر خودتو بنویس...">
+        <input type="number" id="age-input" class="input-field" placeholder="سن شما">
+        <input type="password" id="password-input" class="input-field" placeholder="رمز عبور">
+        <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
+        
+        <button id="register-btn" class="btn">ورود به بازی</button>
+    </div>
+
+    <!-- 2. صفحه بارگذاری -->
+    <div id="screen-loading" class="screen hidden">
+        <div id="loading-text">{{ screens.loading.text }}</div>
+        <!-- انیمیشن 'graffiti_spray_fade' پیچیده است و با CSS خالص پیاده‌سازی نشده است -->
+    </div>
+
+    <!-- 3. منوی اصلی -->
+    <div id="screen-main-menu" class="screen hidden">
+        <div id="main-menu-header">
+            <button id="settings-btn" class="icon-btn">⚙️</button> <!-- icon: gear -->
+            <div class="user-info">
+                <span id="username-display"></span>
+                <div id="user-avatar-display"></div>
+            </div>
+        </div>
+        
+        <div id="main-menu-buttons">
+            <button id="start-flow-btn" class="btn">شروع فلو</button>
+            <button id="online-beat-btn" class="btn">بیت آنلاین</button>
+        </div>
+        
+        <div id="bottom-navigation">
+            <button class="bottom-nav-btn" data-message="به زودی...">مسیرها</button>
+            <button class="bottom-nav-btn" data-message="به زودی...">چالش‌ها</button>
+            <button class="bottom-nav-btn" data-message="به زودی...">فروشگاه</button>
+        </div>
+    </div>
+    
+    <!-- 4. صفحه بازی رپ -->
+    <div id="screen-rap-game" class="screen hidden">
+        <button id="game-back-btn" class="icon-btn back-btn">➡️</button>
+        <div id="rap-game-content">
+            <h2>تکمیل تکس</h2>
+            <p>{{ screens.rap_game.description }}</p>
+            
+            <div id="display-lyrics">...</div>
+            <div id="feedback-message"></div>
+            
+            <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنویس...">
+            <button id="submit-rap-btn" class="btn">بفرست</button>
+            <button id="next-rap-btn" class="btn btn-secondary hidden">تکس بعدی</button>
+        </div>
+    </div>
+
+
+    <!-- پنل‌ها -->
+
+    <!-- 5. پنل تنظیمات -->
+    <div id="panel-settings" class="panel hidden">
+        <div class="panel-content">
+            <button class="close-panel-btn" data-panel="panel-settings">X</button>
+            <h2>{{ screens.settings.title }}</h2>
+            <button class="btn" data-message="به زودی...">کد هدیه</button>
+            <button class="btn" data-message="به زودی...">سازندگان</button>
+            <button class="btn" data-message="به زودی...">پشتیبانی</button>
+        </div>
+    </div>
+    
+    <!-- 6. پنل حالت‌های بازی -->
+    <div id="panel-game-modes" class="panel hidden">
+        <div class="panel-content">
+            <button class="close-panel-btn" data-panel="panel-game-modes">X</button>
+            <h2>{{ screens.game_modes_panel.title }}</h2>
+            
+            <div class="mode-option disabled-mode" data-message="به زودی...">
+                <h3>فلو سوال</h3>
+                <span class="status status-soon">به زودی</span>
+            </div>
+            <div class="mode-option disabled-mode" data-message="به زودی...">
+                <h3>تکس رندوم</h3>
+                <span class="status status-soon">به زودی</span>
+            </div>
+            <div id="start-rap-game-btn" class="mode-option active-mode">
+                <h3>تکمیل تکس</h3>
+                <span class="status status-active">فعال</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- عنصر پیام Toast -->
+    <div id="message-toast" class=""></div>
+
+    <script>
+        // --- داده‌های JSON شبیه‌سازی شده ---
+        // (این داده‌ها مستقیماً از درخواست شما گرفته شده‌اند)
+        const config = {
+            assets: {
+                avatars: [
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۹۴۷_z6u.png",
+                    "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۷۴۳_lrn9.png"
+                ]
+            },
+            screens: {
+                register: {
+                    title: "به دنیای ایران رپ خوش اومدی",
+                    description: "اطلاعات خودتو وارد کن تا وارد صحنه بشی"
+                },
+                loading: {
+                    duration_seconds: 2,
+                    text: "در حال اتصال به صحنه‌ی رپ..."
+                },
+                main_menu: {},
+                settings: {
+                    title: "تنظیمات ایران رپ"
+                },
+                game_modes_panel: {
+                    title: "نوع چالش خودت رو انتخاب کن"
+                },
+                rap_game: {
+                    description: "یه خط از تکس نمایش داده میشه، باید خط بعدی رو طوری بگی که باهاش هم‌قافیه باشه و فلو حفظ بشه.",
+                    feedback_messages: {
+                        success: "دمت گرم! قافیه فِت بود",
+                        failure: "نه دادا، قافیه خراب شد"
+                    }
+                }
+            }
+        };
+
+        // --- چالش‌های بازی (شبیه‌سازی شده) ---
+        // برای بررسی قافیه، ما آخرین کلمه را با لیست قافیه‌های مجاز مقایسه می‌کنیم
+        const rapChallenges = [
+            { 
+                line: "دوباره شب شد و من بیدار...", 
+                rhymes: ["بیمار", "سیگار", "دیدار", "دیوار", "بیکار", "تکرار"] 
+            },
+            { 
+                line: "کلمه‌ها رو میذارم کنار هم با دقت...", 
+                rhymes: ["سرعت", "وقت", "نفرت", "رقت", "کیفیت", "قسمت"] 
+            },
+            { 
+                line: "اینجا تهرانه یعنی شهر هزار رنگ...", 
+                rhymes: ["جنگ", "سنگ", "تنگ", "پلنگ", "قشنگ", "تفنگ"] 
+            },
+            {
+                line: "میگه حالش بده، حالم از اون بدتره...",
+                rhymes: ["دفتره", "سرتره", "بهتره", "اوله", "اینه"]
+            }
+        ];
+        let currentChallenge;
+        let usedChallengeIndices = [];
+
+        // --- وضعیت برنامه ---
+        const state = {
+            username: '',
+            avatar: config.assets.avatars[0], // انتخاب پیش‌فرض
+            userId: '',
+        };
+
+        // --- انتخابگرهای DOM ---
+        const dom = {
+            screens: {
+                register: document.getElementById('screen-register'),
+                loading: document.getElementById('screen-loading'),
+                mainMenu: document.getElementById('screen-main-menu'),
+                rapGame: document.getElementById('screen-rap-game'),
+            },
+            panels: {
+                settings: document.getElementById('panel-settings'),
+                gameModes: document.getElementById('panel-game-modes'),
+            },
+            register: {
+                avatarContainer: document.getElementById('avatar-container'),
+                usernameInput: document.getElementById('username-input'),
+                ageInput: document.getElementById('age-input'),
+                passwordInput: document.getElementById('password-input'),
+                confirmPasswordInput: document.getElementById('confirm-password-input'),
+                registerBtn: document.getElementById('register-btn'),
+            },
+            mainMenu: {
+                settingsBtn: document.getElementById('settings-btn'),
+                usernameDisplay: document.getElementById('username-display'),
+                avatarDisplay: document.getElementById('user-avatar-display'),
+                startFlowBtn: document.getElementById('start-flow-btn'),
+                onlineBeatBtn: document.getElementById('online-beat-btn'),
+                bottomNavButtons: document.querySelectorAll('.bottom-nav-btn'),
+            },
+            rapGame: {
+                displayLyrics: document.getElementById('display-lyrics'),
+                feedbackMessage: document.getElementById('feedback-message'),
+                rapInput: document.getElementById('rap-input'),
+                submitRapBtn: document.getElementById('submit-rap-btn'),
+                nextRapBtn: document.getElementById('next-rap-btn'),
+                gameBackBtn: document.getElementById('game-back-btn'),
+            },
+            gameModes: {
+                startRapGameBtn: document.getElementById('start-rap-game-btn'),
+                disabledModes: document.querySelectorAll('.disabled-mode'),
+            },
+            closePanelBtns: document.querySelectorAll('.close-panel-btn'),
+            messageToast: document.getElementById('message-toast'),
+            buttonsWithMessages: document.querySelectorAll('[data-message]'),
+        };
+
+        // --- توابع اصلی ---
+
+        /**
+         * نمایش یک صفحه خاص و پنهان کردن بقیه
+         * @param {string} screenId - شناسه‌ی صفحه‌ای که باید نمایش داده شود
+         */
+        function showScreen(screenId) {
+            Object.values(dom.screens).forEach(screen => {
+                screen.classList.add('hidden');
+            });
+            if (dom.screens[screenId]) {
+                dom.screens[screenId].classList.remove('hidden');
+            } else {
+                console.error("Screen not found:", screenId);
+            }
+        }
+
+        /**
+         * نمایش یک پنل
+         * @param {string} panelId - شناسه‌ی پنلی که باید نمایش داده شود
+         */
+        function showPanel(panelId) {
+            if (dom.panels[panelId]) {
+                dom.panels[panelId].classList.remove('hidden');
+            } else {
+                console.error("Panel not found:", panelId);
+            }
+        }
+
+        /**
+         * پنهان کردن یک پنل
+         * @param {string} panelId - شناسه‌ی پنلی که باید پنهان شود
+         */
+        function hidePanel(panelId) {
+            if (dom.panels[panelId]) {
+                dom.panels[panelId].classList.add('hidden');
+            } else {
+                console.error("Panel not found:", panelId);
+            }
+        }
+
+        /**
+         * نمایش یک پیام toast
+         * @param {string} message - متنی که باید نمایش داده شود
+         */
+        function showMessage(message) {
+            const toast = dom.messageToast;
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500); // پیام بعد از ۲.۵ ثانیه محو می‌شود
+        }
+
+        /**
+         * تولید یک ID تصادفی
+         * @param {number} length - طول ID
+         * @returns {string} - ID تصادفی
+         */
+        function generateRandomId(length) {
+            const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        /**
+         * بارگذاری آواتارها در صفحه ثبت‌نام
+         */
+        function loadAvatars() {
+            config.assets.avatars.forEach((avatarUrl, index) => {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.classList.add('avatar-option');
+                avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
+                avatarDiv.dataset.url = avatarUrl;
+                
+                // تصویر جایگزین در صورت خطا
+                avatarDiv.onerror = () => { 
+                    avatarDiv.style.backgroundImage = `url('https://placehold.co/70x70/8A2BE2/FFFFFF?text=Rapper')`;
+                };
+
+                if (index === 0) {
+                    avatarDiv.classList.add('selected'); // انتخاب اولین آواتار به عنوان پیش‌فرض
+                }
+                
+                avatarDiv.addEventListener('click', () => {
+                    document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+                    avatarDiv.classList.add('selected');
+                    state.avatar = avatarUrl;
+                });
+                
+                dom.register.avatarContainer.appendChild(avatarDiv);
+            });
+        }
+        
+        /**
+         * تنظیم اطلاعات کاربر در منوی اصلی
+         */
+        function setupMainMenu() {
+            dom.mainMenu.usernameDisplay.textContent = state.username;
+            dom.mainMenu.avatarDisplay.style.backgroundImage = `url(${state.avatar})`;
+            dom.mainMenu.avatarDisplay.onerror = () => {
+                dom.mainMenu.avatarDisplay.style.backgroundImage = `url('https://placehold.co/50x50/8A2BE2/FFFFFF?text=${state.username.charAt(0)}')`;
+            };
+        }
+        
+        /**
+         * بارگذاری یک چالش رپ جدید
+         */
+        function loadChallenge() {
+            if (usedChallengeIndices.length === rapChallenges.length) {
+                usedChallengeIndices = []; // ریست کردن اگر همه‌ی چالش‌ها استفاده شدند
+            }
+
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * rapChallenges.length);
+            } while (usedChallengeIndices.includes(newIndex));
+            
+            usedChallengeIndices.push(newIndex);
+            currentChallenge = rapChallenges[newIndex];
+            
+            dom.rapGame.displayLyrics.textContent = currentChallenge.line;
+            dom.rapGame.rapInput.value = '';
+            dom.rapGame.feedbackMessage.textContent = '';
+            dom.rapGame.feedbackMessage.className = 'feedback-message';
+            dom.rapGame.nextRapBtn.classList.add('hidden');
+            dom.rapGame.submitRapBtn.classList.remove('hidden');
+            dom.rapGame.rapInput.disabled = false;
+        }
+        
+        /**
+         * بررسی قافیه ارسالی توسط کاربر
+         */
+        function checkRhyme() {
+            const userInput = dom.rapGame.rapInput.value.trim();
+            if (!userInput) {
+                showMessage("اول باید یه چیزی بنویسی!");
+                return;
+            }
+            
+            // پیدا کردن آخرین کلمه (ساده‌سازی شده)
+            const lastWord = userInput.split(' ').pop().replace(/[.,!؟]/g, ''); // حذف علائم نگارشی ساده
+            const feedbackMsg = dom.rapGame.feedbackMessage;
+            
+            if (currentChallenge.rhymes.includes(lastWord)) {
+                // موفقیت
+                feedbackMsg.textContent = config.screens.rap_game.feedback_messages.success;
+                feedbackMsg.className = 'feedback-message feedback-success';
+                dom.rapGame.nextRapBtn.classList.remove('hidden');
+                dom.rapGame.submitRapBtn.classList.add('hidden');
+                dom.rapGame.rapInput.disabled = true;
+            } else {
+                // شکست
+                feedbackMsg.textContent = config.screens.rap_game.feedback_messages.failure;
+                feedbackMsg.className = 'feedback-message feedback-failure';
+            }
+        }
+        
+        
+        // --- مدیریت رویدادها ---
+        
+        // اجرای اولیه پس از بارگذاری کامل DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAvatars();
+            
+            // رویداد دکمه ثبت‌نام
+            dom.register.registerBtn.addEventListener('click', () => {
+                const username = dom.register.usernameInput.value.trim();
+                const age = dom.register.ageInput.value;
+                const password = dom.register.passwordInput.value;
+                const confirmPassword = dom.register.confirmPasswordInput.value;
+                
+                if (!username || !age || !password || !confirmPassword) {
+                    showMessage("لطفاً همه‌ی فیلدها رو پر کن.");
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showMessage("رمزهای عبور با هم مطابقت ندارن.");
+                    return;
+                }
+                
+                // ذخیره اطلاعات و ادامه
+                state.username = username;
+                state.userId = generateRandomId(6); // random_id_generation
+                
+                showScreen('loading');
+                
+                setTimeout(() => {
+                    setupMainMenu();
+                    showScreen('mainMenu');
+                }, config.screens.loading.duration_seconds * 1000);
+            });
+            
+            // رویدادهای منوی اصلی
+            dom.mainMenu.settingsBtn.addEventListener('click', () => showPanel('settings'));
+            dom.mainMenu.startFlowBtn.addEventListener('click', () => showPanel('gameModes'));
+            dom.mainMenu.onlineBeatBtn.addEventListener('click', () => showMessage('بیت آنلاین (به زودی...)'));
+            
+            dom.mainMenu.bottomNavButtons.forEach(btn => {
+                btn.addEventListener('click', () => showMessage(btn.dataset.message));
+            });
+            
+            // رویدادهای پنل‌ها
+            dom.closePanelBtns.forEach(btn => {
+                btn.addEventListener('click', () => hidePanel(btn.dataset.panel));
+            });
+            
+            dom.buttonsWithMessages.forEach(btn => {
+                btn.addEventListener('click', () => showMessage(btn.dataset.message));
+            });
+
+            // رویدادهای پنل حالت‌های بازی
+            dom.gameModes.startRapGameBtn.addEventListener('click', () => {
+                hidePanel('gameModes');
+                loadChallenge();
+                showScreen('rapGame');
+            });
+
+            dom.gameModes.disabledModes.forEach(mode => {
+                mode.addEventListener('click', () => showMessage('این حالت به زودی اضافه میشه!'));
+            });
+            
+            // رویدادهای صفحه بازی
+            dom.rapGame.submitRapBtn.addEventListener('click', checkRhyme);
+            dom.rapGame.nextRapBtn.addEventListener('click', loadChallenge);
+            dom.rapGame.gameBackBtn.addEventListener('click', () => showScreen('mainMenu'));
+            
+            // اجازه ارسال با Enter
+            dom.rapGame.rapInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkRhyme();
+                }
+            });
+        });
+        
+    </script>
+
+</body>
+</html>
