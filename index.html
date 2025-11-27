@@ -2,1095 +2,887 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ایران رپ</title>
-    <!-- فونت‌های فارسی با کیفیت بالا برای تم رپ -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=Lalezar&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>بازی هوشیار</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles --- */
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #050505;
+            color: #E0E0E0;
+            overscroll-behavior: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
-    /* --- تنظیمات پایه --- */
-    body {
-        font-family: 'Vazirmatn', sans-serif;
-        background-color: #111;
-        color: #FFFFFF;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        direction: rtl;
-        font-size: 16px; /* اندازه فونت پایه */
-    }
+        /* --- Gold & Button Styles --- */
+        .gold-text {
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .btn-main {
+            background: linear-gradient(180deg, #F0C040 0%, #c39d1a 100%);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            color: #000;
+            font-weight: 800;
+            border-radius: 50px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-main:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+        }
 
-    * {
-        box-sizing: border-box;
-        -webkit-user-select: none; /* جلوگیری از انتخاب متن */
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent; /* [اصلاح] حذف هایلایت آبی در کل برنامه */
-    }
+        /* --- FIXED PROFILE STYLE --- */
+        .profile-wrapper {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 20;
+            flex-direction: row; 
+        }
 
-    /* --- پس‌زمینه --- */
-    .background-image {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('https://s6.uupload.ir/files/inshot_۲۰۲۵۱۰۲۳_۲۰۱۷۳۵۴۰۹_fc2i.jpg');
-        background-size: cover;
-        background-position: center;
-        z-index: -1;
-        filter: blur(8px) brightness(0.6);
-        transform: scale(1.1);
-        transition: filter 0.5s ease;
-    }
+        .profile-avatar-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid #FFD700;
+            background: #111;
+            z-index: 10;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        
+        .profile-card-box {
+            background-color: #111;
+            border: 1px solid #FFD700;
+            border-radius: 12px;
+            height: auto;
+            min-width: 130px;
+            padding: 5px 35px 5px 10px;
+            margin-right: -28px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            position: relative;
+            z-index: 5;
+        }
 
-    /* --- مدیریت صفحات و پنل‌ها --- */
-    .screen, .panel {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        opacity: 1;
-        transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-        z-index: 10;
-    }
+        .inset-box {
+            background: linear-gradient(180deg, #1a1a1a 0%, #222 100%);
+            border-radius: 6px;
+            padding: 2px 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-right: 2px solid #b89626;
+        }
 
-    .panel {
-        background-color: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(5px);
-        z-index: 100;
-    }
+        .label-text { font-size: 0.6rem; color: #aaa; margin-bottom: 1px; display: block; text-align: right; }
+        .profile-name-text { font-size: 0.7rem; }
+        .profile-coin-text { font-size: 0.8rem; }
 
-    .hidden {
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(20px);
-    }
-    .panel.hidden {
-         transform: translateY(100%);
-    }
+        /* --- Settings Button --- */
+        .settings-btn-circle {
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 50%; width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #333; color: #ccc; backdrop-filter: blur(5px);
+        }
 
-    /* --- عناصر UI سفارشی: دکمه‌ها --- */
-    .btn {
-        background-color: #325A9E;
-        color: #FFFFFF;
-        border: none;
-        padding: 14px 30px;
-        font-size: 1.2rem;
-        font-family: 'Vazirmatn', sans-serif;
-        font-weight: 700;
-        border-radius: 40px;
-        cursor: pointer;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        transition: all 0.3s ease-in-out;
-        margin: 12px;
-        min-width: 240px;
-        text-align: center;
-        text-decoration: none;
-        position: relative;
-        overflow: hidden;
-        letter-spacing: 0.5px;
-        outline: none;
-    }
+        /* --- Footer --- */
+        .footer-circle-btn {
+            width: 55px; height: 55px; border-radius: 50%; background: #1a1a1a;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #333; color: #FFD700; transition: all 0.2s;
+        }
+        .footer-circle-btn:active { background: #333; transform: scale(0.9); }
 
-    .btn:focus, .btn:active {
-        outline: none;
-        box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6);
-        transform: translateY(-3px) scale(1.02);
-        border: 1px solid #FFB800;
-    }
+        /* --- Matrix Canvas --- */
+        #matrix-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; opacity: 0.4; pointer-events: none;
+        }
 
-    .btn:before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        transform: translate(-50%, -50%);
-        transition: width 0.4s ease, height 0.4s ease;
-        z-index: 0;
-    }
+        /* --- Common Modal & Game Styles --- */
+        .screen { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; flex-direction: column; animation: fadeIn 0.4s ease; }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-overlay { background-color: rgba(0,0,0,0.92); backdrop-filter: blur(5px); }
+        .game-card { background: #111; border: 1px solid #FFD700; border-radius: 24px; padding: 24px; }
+        
+        .btn-option { background-color: #1a1a1a; border: 1px solid #444; color: white; padding: 15px; border-radius: 12px; width: 100%; }
+        .correct-flash { background-color: #04d182 !important; border-color: #04d182 !important; color: #000; }
+        .wrong-flash { background-color: #ef4444 !important; border-color: #ef4444 !important; }
+        
+        #timer-bar-container { width: 100%; height: 6px; background: #333; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        #timer-bar { height: 100%; background: #FFD700; width: 100%; transition: width 1s linear; }
+        
+        .flash-input { width: 100%; padding: 16px; font-size: 1.25rem; background: rgba(255,255,255,0.1); border: 2px solid #555; border-radius: 12px; color: #fff; text-align: center; outline: none; }
+        .flash-input:focus { border-color: #FFD700; }
+        
+        .btn-skip { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); border: 1px solid #818cf8; color: white; font-size: 0.8rem; padding: 4px 12px; border-radius: 20px; box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
 
-    .btn:hover:before {
-        width: 300%;
-        height: 300%;
-    }
+        /* Challenge Card Styles */
+        .challenge-item {
+            border: 1px solid #333; background: #1a1a1a; padding: 10px; border-radius: 10px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .challenge-btn-sm {
+            padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
+        }
+        
+        /* --- SPLASH SCREEN FIX (FULL SCREEN) --- */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+            overflow: hidden; /* جلوگیری از اسکرول */
+        }
+        
+        #splash-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* این باعث میشه عکس کل صفحه رو پر کنه */
+            object-position: center; /* مرکز عکس رو نشون میده */
+            animation: pulse-logo 4s infinite; /* انیمیشن نرم‌تر */
+        }
+        
+        @keyframes pulse-logo {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; } /* زوم خیلی ملایم */
+            100% { transform: scale(1); opacity: 0.9; }
+        }
 
-    .btn:hover {
-        box-shadow: 0 0 20px #FFB800, 0 0 30px #FFB800, 0 8px 20px rgba(0,0,0,0.6);
-        transform: translateY(-3px) scale(1.02);
-        color: #FFF;
-        border: 1px solid #FFB800;
-    }
-
-    .btn-secondary {
-        background-color: #8A2BE2;
-    }
-    .btn-secondary:hover {
-         box-shadow: 0 0 20px #8A2BE2, 0 0 30px #8A2BE2, 0 8px 20px rgba(0,0,0,0.6);
-         border: 1px solid #8A2BE2;
-    }
-
-    /* --- [تغییر] دکمه‌های اصلی در مرکز صفحه --- */
-    .main-menu-actions {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        gap: 15px;
-    }
-    .main-menu-actions .btn {
-        font-size: 1.25rem; /* کاهش اندازه فونت */
-        padding: 16px 35px; /* کاهش پدینگ */
-        min-width: 260px; /* کاهش حداقل عرض */
-        border-radius: 50px;
-        border: 1px solid #8A2BE2;
-        background: linear-gradient(45deg, #4a1c8a, #325A9E); /* گرادینت جذاب */
-        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-    }
-    .main-menu-actions .btn:hover {
-        border-color: #FFB800;
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 0 25px #FFB800, 0 10px 20px rgba(0,0,0,0.6);
-    }
-    .main-menu-actions .btn-secondary {
-         background: linear-gradient(45deg, #2c2c2c, #5a5a5a);
-         border-color: #777;
-    }
-     .main-menu-actions .btn-secondary:hover {
-        border-color: #8A2BE2;
-        box-shadow: 0 0 25px #8A2BE2, 0 10px 20px rgba(0,0,0,0.6);
-    }
-
-
-    /* --- ورودی‌ها --- */
-    .input-field {
-        background-color: #3C609E;
-        color: #FFFFFF;
-        border: 2px solid #325A9E;
-        padding: 14px;
-        width: 100%;
-        margin: 0;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-family: 'Vazirmatn', sans-serif;
-        text-align: center;
-        transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        outline: none;
-    }
-
-    .input-field::placeholder {
-        color: #C0C0C0;
-        opacity: 0.8;
-    }
-    .input-field:focus {
-        outline: none;
-        border-color: #FFB800;
-        box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
-    }
-
-    .input-wrapper {
-        position: relative;
-        width: 85%;
-        max-width: 350px;
-        margin: 10px 0;
-    }
-
-    .input-wrapper::before,
-    .input-wrapper::after,
-    .input-wrapper .corner-dot {
-        content: '';
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: #FFB800;
-        box-shadow: 0 0 6px #FFB800;
-        z-index: 2;
-    }
-
-    .input-wrapper::before { top: 10px; left: 10px; }
-    .input-wrapper::after { top: 10px; right: 10px; }
-    .input-wrapper .corner-bottom-left-dot { bottom: 10px; left: 10px; }
-    .input-wrapper .corner-bottom-right-dot { bottom: 10px; right: 10px; }
-
-    /* --- عناوین و متون --- */
-    h1, h2 {
-        font-family: 'Lalezar', cursive;
-        color: #FFB800;
-        text-shadow: 0 0 15px rgba(255, 184, 0, 0.7), 0 0 10px rgba(255, 184, 0, 0.5);
-        margin-top: 0;
-        margin-bottom: 20px;
-        letter-spacing: 1px;
-        font-weight: 900;
-    }
-
-    p {
-        font-size: 1.1rem;
-        text-align: center;
-        line-height: 1.6;
-        margin-bottom: 30px;
-    }
-
-    /* --- صفحه ثبت‌نام --- */
-    #screen-register h1 { font-size: 2.8rem; }
-    #screen-register p { font-size: 1.2rem; color: #E0E0E0; }
-
-    .avatar-selection {
-        display: flex;
-        justify-content: center;
-        margin: 25px 0;
-        gap: 20px;
-    }
-    .avatar-option {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background-size: cover;
-        background-position: center;
-        cursor: pointer;
-        border: 4px solid transparent;
-        transition: all 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        flex-shrink: 0;
-    }
-    .avatar-option.selected {
-        border-color: #8A2BE2;
-        box-shadow: 0 0 15px #8A2BE2, 0 0 25px #8A2BE2, 0 0 40px rgba(138, 43, 226, 0.7);
-        transform: scale(1.05);
-    }
-    .avatar-option:hover:not(.selected) {
-        transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(255,255,255,0.4);
-    }
-
-    /* --- صفحه بارگذاری --- */
-    #screen-loading { font-size: 1.8rem; color: #FFB800; text-shadow: 0 0 10px #FFB800; }
-
-    /* --- منوی اصلی --- */
-    #main-menu-header {
-        position: absolute;
-        top: 25px;
-        width: 100%;
-        padding: 0 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .user-info {
-        display: flex;
-        align-items: center;
-        background: rgba(255,255,255,0.1);
-        border-radius: 30px;
-        padding: 5px 15px;
-        cursor: pointer;
-    }
-    #user-avatar-display {
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
-        background-size: cover;
-        background-position: center;
-        border: 3px solid #FFB800;
-        margin-left: 10px; /* کاهش فاصله */
-        box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
-        flex-shrink: 0;
-    }
-    #username-display { font-size: 1.3rem; font-weight: 700; color: #FFFFFF; }
-    
-    #creator-badge {
-        background-color: #FFB800;
-        color: #111;
-        font-size: 0.8rem;
-        font-weight: bold;
-        padding: 4px 10px;
-        border-radius: 12px;
-        margin-right: 12px;
-        text-shadow: none;
-        transition: opacity 0.3s ease;
-    }
-
-    .icon-btn {
-        font-size: 2.2rem;
-        color: #FFFFFF;
-        cursor: pointer;
-        transition: transform 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;
-        background: none;
-        border: none;
-        padding: 5px;
-        outline: none;
-    }
-    .icon-btn:hover {
-        transform: rotate(90deg) scale(1.1);
-        color: #FFB800;
-        text-shadow: 0 0 10px #FFB800;
-    }
-    .icon-btn:focus, .icon-btn:active { outline: none; box-shadow: none; }
-
-    /* --- منوی آواتار --- */
-    #avatar-menu {
-        position: absolute;
-        background-color: rgba(30, 40, 70, 0.95);
-        backdrop-filter: blur(8px);
-        border-radius: 15px;
-        border: 1px solid #325A9E;
-        padding: 10px;
-        z-index: 110;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    #avatar-menu.hidden {
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(-10px);
-    }
-    .avatar-menu-btn {
-        background: none;
-        border: none;
-        color: #FFF;
-        font-family: 'Vazirmatn', sans-serif;
-        font-size: 1rem;
-        padding: 12px 20px;
-        width: 100%;
-        text-align: right;
-        cursor: pointer;
-        border-radius: 8px;
-        transition: background-color 0.2s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .avatar-menu-btn:hover {
-        background-color: rgba(255, 184, 0, 0.2);
-    }
-
-    /* --- نوار ناوبری پایین صفحه --- */
-    #bottom-nav-bar {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(10, 10, 20, 0.85));
-        backdrop-filter: blur(10px);
-        display: flex;
-        justify-content: space-around;
-        align-items: stretch;
-        padding: 0;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-        z-index: 50;
-        height: 70px;
-        border-top: 1px solid rgba(255, 184, 0, 0.5);
-    }
-    .nav-btn {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        color: #A9A9A9;
-        background: none;
-        border: none;
-        font-family: 'Vazirmatn', sans-serif;
-        font-weight: 700;
-        font-size: 0.8rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        gap: 4px;
-        padding: 5px 10px;
-        outline: none;
-        border-radius: 0;
-        margin: 0;
-    }
-    .nav-btn:hover, .nav-btn.active {
-        color: #FFFFFF;
-        background-color: rgba(255, 184, 0, 0.15);
-        transform: translateY(-3px);
-    }
-    .nav-btn .nav-icon {
-        width: 28px;
-        height: 28px;
-        fill: currentColor;
-        transition: all 0.3s ease;
-    }
-
-    /* --- پنل‌ها (بازطراحی شده) --- */
-    .panel-content {
-        background-color: #1F2A47;
-        border: 2px solid #325A9E;
-        border-radius: 20px;
-        padding: 30px;
-        width: 95%;
-        max-width: 500px;
-        text-align: center;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-        position: relative;
-    }
-
-    .panel-content::before, .panel-content::after, .panel-dot {
-        content: '';
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #FFB800;
-        box-shadow: 0 0 8px #FFB800;
-        z-index: 2;
-    }
-
-    .panel-content::before { top: 15px; left: 15px; }
-    .panel-content::after { top: 15px; right: 15px; }
-    .panel-dot.corner-bottom-left-dot { bottom: 15px; left: 15px; }
-    .panel-dot.corner-bottom-right-dot { bottom: 15px; right: 15px; }
-
-    .close-panel-btn {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        font-size: 1.8rem;
-        line-height: 1;
-        color: #FFFFFF;
-        cursor: pointer;
-        background: rgba(0,0,0,0.4);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s ease, transform 0.3s ease;
-        outline: none;
-        z-index: 3;
-    }
-    .close-panel-btn:hover {
-        background: rgba(255,0,0,0.6);
-        transform: scale(1.1) rotate(90deg);
-    }
-    .close-panel-btn:focus, .close-panel-btn:active { outline: none; box-shadow: none; }
-
-    /* --- پنل پروفایل و فروشگاه آواتار --- */
-    #profile-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background-size: cover;
-        background-position: center;
-        border: 5px solid #FFB800;
-        margin: 0 auto 25px;
-        box-shadow: 0 0 20px rgba(255, 184, 0, 0.6);
-    }
-
-    .profile-info { text-align: right; margin-top: 20px; }
-    .profile-info p { text-align: right; font-size: 1.2rem; margin-bottom: 15px; }
-    .profile-info span { font-weight: 700; color: #FFB800; margin-right: 10px; }
-    #avatar-store-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-        max-height: 50vh;
-        overflow-y: auto;
-        padding: 10px;
-    }
-
-    /* --- [تغییر] حالت‌های بازی جدید --- */
-    #game-modes-grid {
-        display: grid;
-        grid-template-columns: 1fr; /* تک ستونه برای نمایش بهتر توضیحات */
-        gap: 20px;
-        margin-top: 30px;
-        width: 100%;
-        max-width: 350px;
-    }
-    .game-mode-card {
-        background: rgba(255, 255, 255, 0.08);
-        border-radius: 15px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 120px; /* کاهش ارتفاع */
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-        position: relative;
-        overflow: hidden;
-        border: 2px solid transparent;
-        outline: none;
-    }
-    .game-mode-card:hover {
-        transform: translateY(-5px) scale(1.03);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-        background: rgba(138, 43, 226, 0.3);
-        border-color: #8A2BE2;
-    }
-    .game-mode-card:focus, .game-mode-card:active {
-        outline: none;
-        box-shadow: 0 0 10px #8A2BE2;
-        transform: translateY(-5px) scale(1.03);
-    }
-
-    .game-mode-card h3 {
-        font-family: 'Lalezar', cursive;
-        margin: 0 0 10px 0;
-        font-size: 1.5rem;
-        color: #FFFFFF;
-        text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    }
-    .game-mode-card p {
-        font-size: 0.9rem;
-        color: #C0C0C0;
-        line-height: 1.5;
-        margin: 0;
-        font-weight: 400;
-    }
-
-
-    /* --- صفحه بازی رپ --- */
-    #rap-game-content { width: 90%; max-width: 550px; text-align: center; }
-    .back-btn { position: absolute; top: 25px; right: 25px; font-size: 2.2rem; }
-    #display-lyrics {
-        font-family: 'Vazirmatn', sans-serif; font-size: 1.6rem; font-weight: 700; color: #FFFFFF;
-        background: rgba(0,0,0,0.6); padding: 25px; border-radius: 15px; margin-bottom: 25px;
-        min-height: 80px; display: flex; align-items: center; justify-content: center;
-        line-height: 1.8; box-shadow: 0 0 15px rgba(255,255,255,0.1);
-    }
-    #feedback-message {
-        font-family: 'Lalezar', cursive; font-size: 1.4rem; font-weight: bold; margin: 20px 0;
-        min-height: 30px; transition: color 0.3s ease;
-    }
-
-    .feedback-success { color: #00FF7F; animation: glow 1s ease-in-out forwards; }
-    .feedback-failure { color: #FF4444; animation: shake 0.5s ease-in-out; }
-
-    @keyframes glow {
-        0%, 100% { text-shadow: 0 0 5px #00FF7F, 0 0 0px #00FF7F; }
-        50% { text-shadow: 0 0 20px #00FF7F, 0 0 10px #00FF7F; }
-    }
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); } 10%, 50%, 90% { transform: translateX(-8px); } 30%, 70% { transform: translateX(8px); }
-    }
-
-    /* --- پیام Toast --- */
-    #message-toast {
-        position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-        background-color: #FFB800; color: #111; padding: 15px 30px; border-radius: 30px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 200; font-size: 1.1rem; font-weight: bold;
-        transition: bottom 0.4s ease-in-out; font-family: 'Vazirmatn', sans-serif; text-align: center;
-    }
-    #message-toast.show { bottom: 85px; }
-</style>
+    </style>
 </head>
-<body>
+<body class="h-screen w-screen overflow-hidden bg-black">
 
-<div class="background-image"></div>
-
-<!-- 1. صفحه ثبت‌نام -->
-<div id="screen-register" class="screen">
-    <div class="avatar-selection" id="avatar-container"></div>
-    <div class="input-wrapper">
-        <input type="text" id="username-input" class="input-field" placeholder="اسم رپر خودتو بنویس...">
-        <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
-    </div>
-    <div class="input-wrapper">
-        <input type="number" id="age-input" class="input-field" placeholder="سن شما">
-        <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
-    </div>
-    <div class="input-wrapper">
-        <input type="password" id="password-input" class="input-field" placeholder="رمز عبور">
-        <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
-    </div>
-    <div class="input-wrapper">
-        <input type="password" id="confirm-password-input" class="input-field" placeholder="تکرار رمز عبور">
-        <span class="corner-dot corner-bottom-left-dot"></span><span class="corner-dot corner-bottom-right-dot"></span>
-    </div>
-    <button id="register-btn" class="btn" style="margin-top: 20px;">ثبت نام</button>
+<!-- SPLASH SCREEN (INTRO) - FULL SCREEN -->
+<div id="splash-screen">
+    <img src="https://github.com/ahmadrezaei090-debug/soberWeb/blob/main/negin-art-1764247215354.png?raw=true" alt="Intro Logo">
 </div>
 
-<!-- 2. صفحه بارگذاری -->
-<div id="screen-loading" class="screen hidden">
-    <div id="loading-text">در حال بارگذاری...</div>
-</div>
-
-<!-- 3. منوی اصلی -->
-<div id="screen-main-menu" class="screen hidden">
-    <div id="main-menu-header">
-        <button id="settings-btn" class="icon-btn">⚙️</button>
-        <div class="user-info" id="user-info-header">
-            <span id="username-display"></span>
-            <span id="creator-badge" class="hidden">سازنده</span>
-            <div id="user-avatar-display"></div>
-        </div>
-    </div>
-
-    <div id="avatar-menu" class="hidden">
-        <button class="avatar-menu-btn" id="profile-btn">
-            <span>👤</span> پروفایل
-        </button>
-        <button class="avatar-menu-btn" id="avatar-store-btn-from-menu">
-            <span>🎭</span> فروشگاه آواتار
-        </button>
-    </div>
+<!-- 1. MAIN MENU SCREEN -->
+<div id="main-menu-screen" class="screen h-full justify-between p-6 relative">
     
-    <div class="main-menu-actions">
-        <button id="start-flow-btn" class="btn">شروع بازی</button>
-        <button id="online-game-btn" class="btn btn-secondary">بازی آنلاین</button>
-    </div>
+    <!-- Matrix Background Canvas -->
+    <canvas id="matrix-bg"></canvas>
 
-    <div id="bottom-nav-bar">
-        <button class="nav-btn" data-message="مسیر (به زودی...)">
-            <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
+    <!-- TOP LEFT: Settings -->
+    <div class="absolute top-6 left-6 z-20">
+        <button id="settings-btn" class="settings-btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            مسیر
-        </button>
-        <button class="nav-btn" data-message="بتل (به زودی...)">
-            <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20.71,3.29a1,1,0,0,0-1.42,0L3.29,19.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L20.71,4.71a1,1,0,0,0,0-1.42Z M3.29,4.71,19.29,20.71a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L4.71,3.29a1,1,0,0,0-1.42,0Z"/>
-            </svg>
-            بتل
-        </button>
-        <button id="shop-nav-btn" class="nav-btn">
-            <svg class="nav-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M17,18a2,2,0,0,1-2,2,2,2,0,0,1-2-2,2,2,0,0,1,2-2,2,2,0,0,1,2,2M1,4H3.27l.94,2H20a1,1,0,0,1,.8,1.6L17.21,12.83a2,2,0,0,1-1.7,1.17H8.34l-.94,2H17v2H7a2,2,0,0,1-2-2c0-.35.09-.68.24-1L6,11.59l-1.35-2.45L3.4,4H1V4m6,14a2,2,0,0,1-2,2,2,2,0,0,1-2-2,2,2,0,0,1,2-2,2,2,0,0,1,2,2Z"/>
-            </svg>
-            فروشگاه
         </button>
     </div>
-</div>
 
-<!-- 4. صفحه بازی رپ -->
-<div id="screen-rap-game" class="screen hidden">
-    <button id="game-back-btn" class="icon-btn back-btn">⬅️</button>
-    <div id="rap-game-content">
-        <h2>تکمیل تکس</h2>
-        <p>یه خط از تکس نمایش داده میشه، باید خط بعدی رو طوری بگی که باهاش هم‌قافیه باشه و فلو حفظ بشه.</p>
-        <div id="display-lyrics">...</div>
-        <div id="feedback-message"></div>
-        <input type="text" id="rap-input" class="input-field" placeholder="خط بعدیِ رپ رو بنویس...">
-        <button id="submit-rap-btn" class="btn">بفرست</button>
-        <button id="next-rap-btn" class="btn btn-secondary hidden">تکس بعدی</button>
-    </div>
-</div>
-
-<!-- پنل‌ها -->
-<!-- 5. پنل تنظیمات -->
-<div id="panel-settings" class="panel hidden">
-    <div class="panel-content">
-        <button class="close-panel-btn" data-panel="settings">X</button>
-        <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
-        <h2>تنظیمات ایران رپ</h2>
-        <div class="input-wrapper" style="margin-top: 20px;">
-            <input type="text" id="gift-code-input" class="input-field" placeholder="کد هدیه را وارد کنید...">
+    <!-- TOP RIGHT: FIXED PROFILE DESIGN -->
+    <div class="profile-wrapper">
+        <!-- 1. The Avatar (Rightmost) -->
+        <div class="profile-avatar-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
         </div>
-        <button id="submit-gift-code-btn" class="btn btn-secondary">اعمال کد</button>
-        <hr style="border-color: #325A9E; width: 80%; margin: 25px auto;">
-        <button class="btn" data-message="سازندگان (به زودی...)">سازندگان</button>
-        <button class="btn" data-message="پشتیبانی (به زودی...)">پشتیبانی</button>
-    </div>
-</div>
 
-<!-- 6. پنل حالت‌های بازی -->
-<div id="panel-game-modes" class="panel hidden">
-    <div class="panel-content">
-        <button class="close-panel-btn" data-panel="gameModes">X</button>
-        <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
-        <!-- [تغییر] عنوان پنل -->
-        <h2>رپ روم</h2>
-        <!-- [تغییر] حالت‌های جدید بازی -->
-        <div id="game-modes-grid">
-            <div class="game-mode-card" data-message="حدس خواننده (به زودی...)">
-                <h3>حدس خواننده</h3>
-                <p>یه بیت از یه رپر میاد و تو باید بگی کیه. اگه بیت بعدی رو هم بگی، امتیازت دو برابر میشه!</p>
+        <!-- 2. The Info Card (Pushed underneath from the left) -->
+        <div class="profile-card-box">
+            <!-- Name Row -->
+            <div>
+                <span class="label-text">بازیکن:</span>
+                <div class="inset-box">
+                    <span class="text-white font-bold tracking-wider profile-name-text">هوشیار</span>
+                    <span class="text-[8px] opacity-70">✏️</span>
+                </div>
             </div>
-            <div class="game-mode-card" data-message="تاریخچه رپ (به زودی...)">
-                <h3>تاریخچه رپ</h3>
-                <p>سوالای چند گزینه‌ای در مورد اولین‌های رپ فارسی و اتفاقات مهمش.</p>
+            
+            <!-- Coin Row -->
+            <div>
+                <span class="label-text">سکه:</span>
+                <div class="inset-box" style="justify-content: center;">
+                    <span id="menu-coins" class="text-yellow-400 font-bold profile-coin-text">500</span>
+                </div>
             </div>
-            <div id="start-rap-game-card" class="game-mode-card">
-                <h3>تکمیل تکس</h3>
-                <p>تکس رو با یه کلمه هم قافیه و با معنی کامل کن.</p>
-            </div>
+            
+            <span id="menu-score" class="hidden">0</span>
+            <span id="menu-tickets" class="hidden">0</span>
         </div>
     </div>
-</div>
 
-<!-- 7. پنل پروفایل -->
-<div id="panel-profile" class="panel hidden">
-    <div class="panel-content">
-        <button class="close-panel-btn" data-panel="profile">X</button>
-        <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
-        <h2>پروفایل رپر</h2>
-        <div id="profile-avatar"></div>
-        <div class="profile-info">
-            <p>نام کاربری: <span id="profile-username"></span></p>
-            <p>سن: <span id="profile-age"></span></p>
-            <p>تعداد آواتارها: <span id="profile-avatar-count"></span></p>
-            <p>تعداد بازی انجام شده: <span id="profile-games-played"></span></p>
-            <p>ساعت بازی: <span id="profile-play-time"></span></p>
+    <!-- Center Content -->
+    <div class="flex flex-col items-center justify-center w-full h-full pt-10 pb-10 z-10">
+        <div class="w-full max-w-xs space-y-5">
+            <button id="open-mode-modal-btn" class="btn-main w-full py-4 text-2xl shadow-xl hover:scale-105 transition-transform">
+                شروع بازی
+            </button>
+            <button id="challenges-btn" class="btn-main w-full py-4 text-xl opacity-80" style="filter: grayscale(0.2); background: #333; color: #aaa; box-shadow:none; border: 1px solid #444;">
+                آرشیو
+            </button>
         </div>
     </div>
-</div>
 
-<!-- 8. پنل فروشگاه آواتار -->
-<div id="panel-avatar-store" class="panel hidden">
-    <div class="panel-content">
-        <button class="close-panel-btn" data-panel="avatarStore">X</button>
-        <span class="panel-dot corner-bottom-left-dot"></span><span class="panel-dot corner-bottom-right-dot"></span>
-        <h2>فروشگاه آواتار</h2>
-        <p>آواتار جدیدت رو انتخاب کن</p>
-        <div id="avatar-store-grid"></div>
+    <!-- Footer Icons -->
+    <div class="w-full flex justify-center items-center space-x-8 space-x-reverse pb-6 z-10">
+        <button class="footer-circle-btn"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></button>
+        <button class="footer-circle-btn" style="width: 70px; height: 70px; border-color: #F0C040; box-shadow: 0 0 15px rgba(255,215,0,0.1);"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg></button>
+        <button id="daily-challenge-btn" class="footer-circle-btn hover:text-indigo-400 hover:border-indigo-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+        </button>
     </div>
 </div>
 
-<div id="message-toast"></div>
+<!-- MODE MODAL -->
+<div id="mode-modal" class="fixed inset-0 z-50 hidden modal-overlay flex justify-center items-center">
+    <div class="game-card w-11/12 max-w-sm text-center animate-bounce-in bg-black">
+        <h2 class="text-2xl font-black gold-text mb-6">انتخاب سبک بازی</h2>
+        <div class="space-y-4">
+            <button onclick="selectMode('old')" class="btn-option flex flex-col items-center py-4 hover:bg-yellow-900/30">
+                <span class="text-xl font-bold text-yellow-400">2 Old (کلاسیک)</span>
+                <span class="text-xs text-gray-400 mt-1">۴ گزینه‌ای | ۳ جان</span>
+            </button>
+            <button onclick="selectMode('flash')" class="btn-option flex flex-col items-center py-4 hover:bg-yellow-900/30">
+                <span class="text-xl font-bold text-yellow-400">2.5 Flash (تایپی)</span>
+                <span class="text-xs text-gray-400 mt-1">تایپ پاسخ | ۳۰ ثانیه زمان</span>
+            </button>
+        </div>
+        <button id="close-mode-btn" class="mt-6 text-gray-500 text-sm border-b border-gray-600">انصراف</button>
+    </div>
+</div>
+
+<!-- UPDATED CHALLENGE MODAL (With Rewards) -->
+<div id="challenge-modal" class="fixed inset-0 z-50 hidden modal-overlay flex justify-center items-center">
+    <div class="game-card w-11/12 max-w-sm text-center bg-black" style="border-color: #818cf8;">
+        <h2 class="text-xl font-black text-indigo-400 mb-4">مرکز چالش‌ها</h2>
+        
+        <div class="space-y-3">
+            <!-- Challenge 1: Speed -->
+            <div class="challenge-item">
+                <div class="text-right">
+                    <p class="text-white text-sm font-bold">سرعت (Flash)</p>
+                    <p class="text-[10px] text-gray-400">۳ پاسخ صحیح پشت هم</p>
+                    <p class="text-[10px] text-green-400 mt-1">🎁 جایزه: ۱ بلیط رد کردن</p>
+                </div>
+                <button onclick="startChallengeRun('speed')" class="challenge-btn-sm bg-indigo-600 text-white">شروع</button>
+            </div>
+
+            <!-- Challenge 2: Marathon -->
+            <div class="challenge-item">
+                <div class="text-right">
+                    <p class="text-yellow-400 text-sm font-bold">استقامت (Old)</p>
+                    <p class="text-[10px] text-gray-400">۵ پاسخ بدون باخت جان</p>
+                    <p class="text-[10px] text-green-400 mt-1">🎁 جایزه: ۲۰۰ سکه</p>
+                </div>
+                <button onclick="startChallengeRun('marathon')" class="challenge-btn-sm bg-yellow-700 text-white">شروع</button>
+            </div>
+
+            <!-- Challenge 3: Hardcore -->
+            <div class="challenge-item">
+                <div class="text-right">
+                    <p class="text-red-500 text-sm font-bold">هاردکور 🔥</p>
+                    <p class="text-[10px] text-gray-400">تایپی | ۱۵ ثانیه زمان</p>
+                    <p class="text-[10px] text-green-400 mt-1">🎁 جایزه: ۲ بلیط رد کردن</p>
+                </div>
+                <button onclick="startChallengeRun('hardcore')" class="challenge-btn-sm bg-red-900 text-white">شروع</button>
+            </div>
+        </div>
+
+        <button id="close-challenge-btn" class="mt-6 text-gray-500 text-sm">بستن</button>
+    </div>
+</div>
+
+<!-- GAMEPLAY SCREEN -->
+<div id="gameplay-screen" class="screen p-6 justify-between">
+    <header class="flex justify-between items-center w-full pt-4">
+        <button id="exit-game-btn" class="text-red-500 font-bold px-3 py-1 border border-red-900 rounded bg-red-900/20">خروج</button>
+        <button id="skip-btn" class="hidden btn-skip" onclick="useSkipTicket()">🎟️ رد کردن سوال</button>
+        <div class="text-lg font-bold text-right">
+            <div id="score-display">امتیاز: <span id="game-score" class="gold-text">0</span></div>
+            <div id="challenge-progress" class="hidden text-sm text-indigo-400">پیشرفت: <span id="challenge-count">0</span>/<span id="challenge-target">3</span></div>
+        </div>
+    </header>
+    
+    <div class="w-full flex justify-end px-1 mt-1">
+        <span id="game-stats" class="text-lg font-bold">❤️ 3</span>
+    </div>
+
+    <main class="flex-grow flex flex-col justify-center items-center w-full max-w-md mx-auto">
+        <div class="game-card w-full p-8 mb-8 text-center bg-gray-900/90 relative">
+             <div id="timer-bar-container" class="absolute top-0 left-0 right-0 hidden rounded-t-xl" style="margin:0;">
+                <div id="timer-bar"></div>
+            </div>
+            <p id="riddle-text" class="text-xl leading-8 font-bold text-gray-200 mt-2">...</p>
+        </div>
+
+        <div id="options-container" class="grid grid-cols-2 gap-4 w-full"></div>
+
+        <div id="flash-container" class="w-full flex flex-col items-center hidden">
+            <input type="text" id="flash-input" class="flash-input" placeholder="پاسخ را بنویسید...">
+            <button id="flash-submit-btn" class="btn-main w-full py-3 mt-4 text-lg">ثبت پاسخ</button>
+        </div>
+    </main>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="game-over-screen" class="screen justify-center items-center p-8 text-center">
+    <h1 id="game-over-title" class="text-5xl font-black mb-6 gold-text">پایان بازی</h1>
+    <p id="game-over-msg" class="text-2xl text-gray-300 mb-2">امتیاز شما: <span id="final-score" class="text-white">0</span></p>
+    <div class="w-full max-w-xs space-y-4 mt-8">
+        <button id="play-again-btn" class="btn-main w-full py-3">بازی مجدد</button>
+        <button id="back-to-menu-btn" class="w-full py-3 border border-gray-600 rounded-xl text-gray-400">بازگشت به منو</button>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast-modal" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gold px-6 py-3 rounded-full shadow-xl z-50 transition-all duration-300 opacity-0 pointer-events-none">
+    <p id="toast-msg" class="text-gold text-sm font-bold">⚠️ این بخش به زودی اضافه می‌شود</p>
+</div>
 
 <script>
-    // --- تمام کد جاوا اسکریپت بدون تغییر باقی می‌ماند ---
-    // ... (کد جاوا اسکریپت شما در اینجا قرار می‌گیرد)
-    const config = {
-        assets: {
-            avatars: [
-                "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۴_۱۹۱۳۰۱_utr.png",
-                "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۴_۱۹۱۲۴۴_dwyf.png",
-                "https://s6.uupload.ir/files/img_۲۰۲۵۱۰۲۳_۲۰۲۹۴۷_9o3p.png"
-            ]
-        },
-        screens: {
-            loading: { duration_seconds: 2 },
-            rap_game: {
-                feedback_messages: {
-                    success: "دمت گرم! قافیه فِت بود",
-                    failure: "نه دادا، قافیه خراب شد"
-                }
-            }
-        },
-        creator_gift_code: "ak9090a90k80"
-    };
-
-    const rapChallenges = [
-        { line: "دوباره شب شد و من بیدار...", rhymes: ["بیمار", "سیگار", "دیدار", "دیوار", "بیکار", "تکرار"] },
-        { line: "کلمه‌ها رو میذارم کنار هم با دقت...", rhymes: ["سرعت", "وقت", "نفرت", "رقت", "کیفیت", "قسمت"] },
-        { line: "اینجا تهرانه یعنی شهر هزار رنگ...", rhymes: ["جنگ", "سنگ", "تنگ", "پلنگ", "قشنگ", "تفنگ"] },
-        { line: "میگه حالش بده، حالم از اون بدتره...", rhymes: ["دفتره", "سرتره", "بهتره", "اوله", "اینور", "اونور"] }
+    // --- Database ---
+    const riddles = [
+        { riddle: "آن چیست که همه جا هست ولی جایی را اشغال نمی‌کند؟", options: ["هوا", "فکر", "نور", "فضا"], answer: "هوا" },
+        { riddle: "آن چیست که پر دارد ولی پرواز نمی‌کند؟", options: ["کتاب", "بالش", "در", "هواپیما"], answer: "بالش" },
+        { riddle: "آن چیست که روز را آغاز می‌کند و شب را به پایان می‌رساند؟", options: ["حرف ر", "خورشید", "ماه", "حرف ب"], answer: "حرف ر" },
+        { riddle: "آن چیست که هرچه از آن بردارند بزرگتر می‌شود؟", options: ["چاله", "سن", "علم", "کوه"], answer: "چاله" },
+        { riddle: "آن چیست که یک چشم دارد ولی نمی‌بیند؟", options: ["سوزن", "حلقه", "دکمه", "سکه"], answer: "سوزن" },
+        { riddle: "آن چیست که گردن دارد ولی سر ندارد؟", options: ["کوزه", "پیراهن", "بطری", "گیتار"], answer: "پیراهن" },
+        { riddle: "آن چیست که زبان ندارد اما راست می‌گوید؟", options: ["آینه", "کتاب", "ساعت", "ترازو"], answer: "آینه" },
+        { riddle: "آن چیست که اگر در آب بیفتد خیس نمی‌شود؟", options: ["روغن", "نور", "سایه", "یخ"], answer: "سایه" },
+        { riddle: "آن چیست که دندان دارد اما چیزی نمی‌خورد؟", options: ["شانه", "اره", "کیف", "دهان"], answer: "شانه" },
+        { riddle: "آن چیست که شهر دارد اما خانه نه، کوه دارد اما درخت نه؟", options: ["نقشه", "کره زمین", "رویا", "بیابان"], answer: "نقشه" },
+        { riddle: "آن چیست که بی‌صدا زنگ می‌زند؟", options: ["تلفن", "آهن", "ساعت", "در"], answer: "آهن" },
+        { riddle: "برادرِ پدرِ توست، اما عموی تو نیست؟", options: ["دایی", "پدر", "عمه", "پدربزرگ"], answer: "پدر" },
+        { riddle: "آن چیست که متعلق به توست اما دیگران بیشتر از تو از آن استفاده می‌کنند؟", options: ["پول", "اسم", "زمان", "ماشین"], answer: "اسم" },
+        { riddle: "آن چیست که وقتی خشک می‌شود خیس می‌شود؟", options: ["حوله", "یخ", "چوب", "برف"], answer: "حوله" },
+        { riddle: "آن چیست که هر چه بیشتر باشد، کمتر می‌بینید؟", options: ["مه", "نور", "تاریکی", "پرده"], answer: "تاریکی" },
+        { riddle: "آن چیست که جان دارد ولی نفس نمی‌کشد؟", options: ["ماهی", "فنجان", "گیاه", "بادکنک"], answer: "فنجان" },
+        { riddle: "آن چیست که چهار پا دارد اما راه نمی‌رود؟", options: ["میز", "اسب", "لاکپشت", "ماشین"], answer: "میز" },
+        { riddle: "آن چیست که کلیدهای زیادی دارد اما نمی‌تواند دری را باز کند؟", options: ["پیانو", "نقشه", "زندان", "قفل"], answer: "پیانو" },
+        { riddle: "آن چیست که بالا می‌رود اما هرگز پایین نمی‌آید؟", options: ["سن", "باران", "دود", "قیمت"], answer: "سن" },
+        { riddle: "آن چیست که شکستنش واجب است تا بتوان از آن استفاده کرد؟", options: ["تخم مرغ", "گردو", "قول", "سکوت"], answer: "تخم مرغ" },
+        { riddle: "آن چیست که سر ندارد اما کلاه دارد؟", options: ["قارچ", "میخ", "عصا", "بطری"], answer: "قارچ" },
+        { riddle: "آن چیست که پا دارد اما راه نمی‌رود؟", options: ["شلوار", "میز", "صندلی", "نردبان"], answer: "شلوار" },
+        { riddle: "آن چیست که رنگش سفید است اما قند نیست، ریشه دارد اما درخت نیست؟", options: ["دندان", "پیاز", "سیر", "ترب"], answer: "دندان" },
+        { riddle: "آن چیست که در رادیو و دریا مشترک است؟", options: ["موج", "صدا", "آب", "پیام"], answer: "موج" },
+        { riddle: "آن چیست که وقتی تمیز است سیاه است و وقتی کثیف است سفید؟", options: ["تخته سیاه", "کفش", "زغال", "شب"], answer: "تخته سیاه" },
+        { riddle: "آن چیست که گوش دارد ولی نمی‌شنود؟", options: ["دیگ", "سوزن", "ذرت", "فنجان"], answer: "دیگ" },
+        { riddle: "آن چیست که هر چه می‌دوی به آن نمی‌رسی؟", options: ["سایه", "خورشید", "باد", "زمان"], answer: "سایه" },
+        { riddle: "آن کدام پرنده‌ای است که اگر نامش را برعکس کنی نام پرنده دیگری می‌شود؟", options: ["زاغ", "غاز", "باز", "درنا"], answer: "زاغ" },
+        { riddle: "آن چیست که شیرین است اما مزه ندارد؟", options: ["قند", "شکر", "خواب", "عسل"], answer: "خواب" },
+        { riddle: "آن چیست که دو سر دارد و یک کمر؟", options: ["قیچی", "عینک", "دوچرخه", "انسان"], answer: "قیچی" },
+        { riddle: "آن چیست که در هوا می‌پرد ولی بال و پر ندارد؟", options: ["بادبادک", "هواپیما", "ابر", "غبار"], answer: "بادبادک" },
+        { riddle: "آن چیست که فقط با نام بردنش می‌شکند؟", options: ["شیشه", "سکوت", "دل", "یخ"], answer: "سکوت" },
+        { riddle: "آن چیست که چشم دارد اما نمی‌بیند، پوست دارد اما بدن ندارد؟", options: ["سیب زمینی", "مار", "کفش", "درخت"], answer: "سیب زمینی" },
+        { riddle: "آن چیست که اشک دارد اما چشم ندارد؟", options: ["ابر", "شمع", "پیاز", "دریا"], answer: "شمع" },
+        { riddle: "آن چیست که هر چه آن را می‌کشیم کوتاه‌تر می‌شود؟", options: ["سیگار", "طناب", "خط", "زمان"], answer: "سیگار" },
+        { riddle: "آن چیست که برگ دارد اما درخت نیست، شیرازه دارد اما کتاب نیست؟", options: ["دفتر", "کاهو", "تقویم", "روزنامه"], answer: "کاهو" },
+        { riddle: "آن چیست که همیشه دست به کمر ایستاده است؟", options: ["آفتابه", "سماور", "فنجان", "کوزه"], answer: "آفتابه" },
+        { riddle: "آن چیست که آتش است اما دود ندارد؟", options: ["برق", "عشق", "فلفل", "خورشید"], answer: "برق" },
+        { riddle: "آن چیست که همه می‌خورند ولی سیر نمی‌شوند؟", options: ["غصه", "هوا", "کتک", "آب"], answer: "غصه" },
+        { riddle: "آن چیست که یک پا دارد و سه چشم؟", options: ["چراغ راهنما", "عینک", "دوربین", "سوزن"], answer: "چراغ راهنما" },
+        { riddle: "آن چیست که پوستش را می‌کند و گریه می‌کنند؟", options: ["پیاز", "سیب", "موز", "نارگیل"], answer: "پیاز" },
+        { riddle: "آن چیست که در زمستان خانه را گرم می‌کند و در تابستان درخت را خنک؟", options: ["برگ", "بخاری", "کولر", "آفتاب"], answer: "برگ" },
+        { riddle: "آن چیست که اولش عبادت است و آخرش آشامیدنی؟", options: ["شام", "سحر", "چای", "آب"], answer: "شام" },
+        { riddle: "آن چیست که هزاران چشم دارد اما نمی‌بیند؟", options: ["آسمان", "الک", "تور ماهیگیری", "زنبور"], answer: "الک" },
+        { riddle: "آن چیست که می‌رود اما بر نمی‌گردد؟", options: ["عمر", "راه", "رودخانه", "باد"], answer: "عمر" },
+        { riddle: "آن چیست که بی زبان سخن می‌گوید و بی پا راه می‌رود؟", options: ["نامه", "کتاب", "تلفن", "رادیو"], answer: "نامه" },
+        { riddle: "آن چیست که هر چه پاکش کنی کثیف‌تر می‌شود؟", options: ["آب", "دستمال", "صابون", "تخته"], answer: "آب" },
+        { riddle: "آن چیست که سر دارد، ته دارد، اما بدن ندارد؟", options: ["سکه", "کتاب", "صف", "جاده"], answer: "صف" },
+        { riddle: "آن چیست که تا اسمش را صدا می‌زنی ناپدید می‌شود؟", options: ["سکوت", "تاریکی", "راز", "خواب"], answer: "سکوت" },
+        { riddle: "آن چیست که وقتی هوا گرم است لباس می‌پوشد و وقتی سرد است لخت می‌شود؟", options: ["درخت", "کوه", "زمین", "انسان"], answer: "درخت" },
+        { riddle: "آن چیست که با بریدن سرش، زنده می‌شود؟", options: ["خز", "بالش", "دکمه", "قارچ"], answer: "خز" },
+        { riddle: "آن چیست که روز و شب راه می‌رود اما خسته نمی‌شود؟", options: ["آب", "ساعت", "خورشید", "قلب"], answer: "ساعت" },
+        { riddle: "آن چیست که هم در آشپزخانه است هم در اتومبیل؟", options: ["دنده", "چرخ", "فرمان", "صندلی"], answer: "دنده" },
+        { riddle: "آن چیست که نه دست دارد و نه پا، اما از همه جا بالا می‌رود؟", options: ["دود", "پیچک", "سایه", "باد"], answer: "دود" },
+        { riddle: "آن چیست که وقتی می‌خندد لب‌هایش باز نمی‌شود؟", options: ["پسته", "انار", "گردو", "فندق"], answer: "پسته" },
+        { riddle: "آن چیست که پر دارد اما پرواز نمی‌کند، و اگر آب بخورد می‌میرد؟", options: ["آتش", "بالش", "قند", "کاغذ"], answer: "آتش" },
+        { riddle: "آن چیست که هر چه تندتر بدود، زودتر به زمین می‌خورد؟", options: ["دوچرخه", "چرخ", "آبشار", "عمر"], answer: "دوچرخه" },
+        { riddle: "آن چیست که با اینکه پا ندارد اما سفر می‌کند؟", options: ["تمبر", "نامه", "پول", "همه موارد"], answer: "همه موارد" },
+        { riddle: "آن چیست که در آب غرق نمی‌شود و در آتش نمی‌سوزد؟", options: ["یخ", "جیوه", "سایه", "خاک"], answer: "یخ" },
+        { riddle: "آن چیست که یک نفر دارد، دو نفر دارد، اما سه نفر ندارد؟", options: ["راز", "پول", "دوست", "نام"], answer: "راز" },
+        { riddle: "آن چیست که سرخ است اما سیب نیست، لایه لایه است اما پیاز نیست؟", options: ["انار", "گل رز", "کلم قرمز", "لبو"], answer: "انار" },
+        { riddle: "آن چیست که اول چهار پا دارد، بعد دو پا، و در آخر سه پا؟", options: ["انسان", "میمون", "قورباغه", "میز"], answer: "انسان" },
+        { riddle: "آن چیست که همه آن را دارند ولی هیچکس نمی‌تواند آن را از دست بدهد؟", options: ["سایه", "گذشته", "نام", "خاطره"], answer: "سایه" },
+        { riddle: "آن چیست که مادر همه چیز است؟", options: ["زمین", "طبیعت", "صبر", "آب"], answer: "زمین" },
+        { riddle: "آن چیست که هر چه می‌خورد چاق نمی‌شود؟", options: ["آسیاب", "کرم", "آتش", "موریانه"], answer: "آسیاب" },
+        { riddle: "آن چیست که چیستان است؟", options: ["راز", "معما", "سوال", "کلمه"], answer: "معما" },
+        { riddle: "کدام حیوان است که اگر سرش را ببری عضوی از بدن می‌شود؟", options: ["گرگ", "مار", "شیر", "خرس"], answer: "گرگ" },
+        { riddle: "آن چیست که با گریه وارد می‌شود و با گریه بدرقه می‌شود؟", options: ["انسان", "باران", "غم", "شادی"], answer: "انسان" },
+        { riddle: "آن چیست که وقتی راه می‌رود رد پا ندارد؟", options: ["کشتی", "ماهی", "قطار", "هواپیما"], answer: "کشتی" },
+        { riddle: "آن چیست که هر چه تقسیمش کنی کم نمی‌شود؟", options: ["مهربانی", "دانش", "شادی", "همه موارد"], answer: "همه موارد" }
     ];
-    let currentChallenge;
-    let usedChallengeIndices = [];
 
-    const state = {
-        username: '',
-        age: 0,
-        avatar: config.assets.avatars[0],
-        userId: '',
-        gamesPlayed: 0,
-        playTime: 0,
-        isCreator: false
-    };
+    // --- Variables ---
+    let gameState = { highScore: 0, coins: 500, skipTickets: 0 };
+    let score = 0;
+    let lives = 3;
+    let currentRiddleIndex = 0;
+    let shuffledRiddles = [];
+    let currentMode = 'old'; 
+    let timerInterval;
+    let timeLeft = 30;
+    let maxTime = 30; // To handle Hardcore mode
     
-    const dom = {
-        screens: {
-            register: document.getElementById('screen-register'),
-            loading: document.getElementById('screen-loading'),
-            mainMenu: document.getElementById('screen-main-menu'),
-            rapGame: document.getElementById('screen-rap-game'),
-        },
-        panels: {
-            settings: document.getElementById('panel-settings'),
-            gameModes: document.getElementById('panel-game-modes'),
-            profile: document.getElementById('panel-profile'),
-            avatarStore: document.getElementById('panel-avatar-store'),
-        },
-        register: {
-            avatarContainer: document.getElementById('avatar-container'),
-            usernameInput: document.getElementById('username-input'),
-            ageInput: document.getElementById('age-input'),
-            passwordInput: document.getElementById('password-input'),
-            confirmPasswordInput: document.getElementById('confirm-password-input'),
-            registerBtn: document.getElementById('register-btn'),
-        },
-        mainMenu: {
-            settingsBtn: document.getElementById('settings-btn'),
-            userInfoHeader: document.getElementById('user-info-header'),
-            usernameDisplay: document.getElementById('username-display'),
-            avatarDisplay: document.getElementById('user-avatar-display'),
-            creatorBadge: document.getElementById('creator-badge'),
-            avatarMenu: document.getElementById('avatar-menu'),
-            profileBtn: document.getElementById('profile-btn'),
-            avatarStoreBtnFromMenu: document.getElementById('avatar-store-btn-from-menu'),
-            startFlowBtn: document.getElementById('start-flow-btn'),
-            onlineGameBtn: document.getElementById('online-game-btn'),
-            shopNavBtn: document.getElementById('shop-nav-btn'),
-        },
-        rapGame: {
-            displayLyrics: document.getElementById('display-lyrics'),
-            feedbackMessage: document.getElementById('feedback-message'),
-            rapInput: document.getElementById('rap-input'),
-            submitRapBtn: document.getElementById('submit-rap-btn'),
-            nextRapBtn: document.getElementById('next-rap-btn'),
-            gameBackBtn: document.getElementById('game-back-btn'),
-        },
-        gameModes: {
-            startRapGameCard: document.getElementById('start-rap-game-card'),
-        },
-        profilePanel: {
-            avatar: document.getElementById('profile-avatar'),
-            username: document.getElementById('profile-username'),
-            age: document.getElementById('profile-age'),
-            avatarCount: document.getElementById('profile-avatar-count'),
-            gamesPlayed: document.getElementById('profile-games-played'),
-            playTime: document.getElementById('profile-play-time'),
-        },
-        avatarStore: {
-            grid: document.getElementById('avatar-store-grid'),
-        },
-        settingsPanel: {
-            giftCodeInput: document.getElementById('gift-code-input'),
-            submitGiftCodeBtn: document.getElementById('submit-gift-code-btn'),
-        },
-        closePanelBtns: document.querySelectorAll('.close-panel-btn'),
-        messageToast: document.getElementById('message-toast'),
-        buttonsWithMessages: document.querySelectorAll('[data-message]'),
+    // Challenge Specifics
+    let isChallengeMode = false;
+    let challengeType = ''; // 'speed', 'marathon', 'hardcore'
+    let challengeStreak = 0;
+    let challengeTarget = 3;
+
+    const normalize = (str) => str.trim().replace(/ی/g, 'ي').replace(/ک/g, 'ك');
+
+    // --- Navigation ---
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if (id === 'main-menu-screen') {
+            updateMenuUI();
+            startMatrixEffect();
+        } else {
+            stopMatrixEffect();
+        }
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast-modal');
+        const p = document.getElementById('toast-msg');
+        if(msg) p.textContent = msg;
+        else p.textContent = "⚠️ این بخش به زودی اضافه می‌شود";
+        
+        t.style.opacity = '1';
+        t.style.transform = 'translate(-50%, 0)';
+        setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.transform = 'translate(-50%, -20px)';
+        }, 2000);
+    }
+
+    // --- MATRIX BACKGROUND LOGIC ---
+    let matrixInterval;
+    const canvas = document.getElementById('matrix-bg');
+    const ctx = canvas.getContext('2d');
+    const persianChars = ['ی', 'ت', 'ق', 'ط', 'ه', 'و', 'ش', 'ی', 'ا', 'ر', 'ع', 'غ', 'ف', 'ک', 'گ', 'چ', 'پ', 'ژ'];
+    let drops = [];
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        drops = [];
+        for(let x = 0; x < columns; x++) drops[x] = 1;
+    }
+
+    function drawMatrix() {
+        ctx.fillStyle = 'rgba(5, 5, 5, 0.1)'; // Trail effect
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#FFD700'; // Gold Color
+        ctx.font = '14px Vazirmatn';
+        
+        for(let i = 0; i < drops.length; i++) {
+            const text = persianChars[Math.floor(Math.random() * persianChars.length)];
+            ctx.fillText(text, i * 14, drops[i] * 14);
+            
+            if(drops[i] * 14 > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    function startMatrixEffect() {
+        if(matrixInterval) clearInterval(matrixInterval);
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        matrixInterval = setInterval(drawMatrix, 50);
+    }
+
+    function stopMatrixEffect() {
+        clearInterval(matrixInterval);
+        window.removeEventListener('resize', resizeCanvas);
+    }
+
+    // --- Modal Logic ---
+    const modeModal = document.getElementById('mode-modal');
+    const challengeModal = document.getElementById('challenge-modal');
+
+    document.getElementById('open-mode-modal-btn').onclick = () => {
+        modeModal.classList.remove('hidden');
+    };
+    document.getElementById('close-mode-btn').onclick = () => {
+        modeModal.classList.add('hidden');
     };
 
-    function showScreen(screenId) {
-        Object.values(dom.screens).forEach(screen => screen.classList.add('hidden'));
-        if (dom.screens[screenId]) dom.screens[screenId].classList.remove('hidden');
+    // Challenge Modal Triggers
+    document.getElementById('daily-challenge-btn').onclick = () => {
+        challengeModal.classList.remove('hidden');
+    };
+    document.getElementById('close-challenge-btn').onclick = () => {
+        challengeModal.classList.add('hidden');
+    };
+
+    // --- GAME START LOGIC ---
+
+    function selectMode(mode) {
+        currentMode = mode;
+        isChallengeMode = false;
+        modeModal.classList.add('hidden');
+        startGame(); // Starts immediately
     }
 
-    function showPanel(panelId) {
-        if (dom.panels[panelId]) dom.panels[panelId].classList.remove('hidden');
-    }
-
-    function hidePanel(panelId) {
-        if (dom.panels[panelId]) dom.panels[panelId].classList.add('hidden');
-    }
-
-    function hideAllPanels() {
-        Object.values(dom.panels).forEach(panel => panel.classList.add('hidden'));
-    }
-
-    function showMessage(message) {
-        dom.messageToast.textContent = message;
-        dom.messageToast.classList.add('show');
-        setTimeout(() => dom.messageToast.classList.remove('show'), 2500);
-    }
-
-    function generateRandomId(length) {
-        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-        return result;
-    }
-
-    function createAvatarElement(avatarUrl, onClickCallback) {
-        const avatarDiv = document.createElement('div');
-        avatarDiv.classList.add('avatar-option');
-        avatarDiv.style.backgroundImage = `url(${avatarUrl})`;
-        avatarDiv.dataset.url = avatarUrl;
-        avatarDiv.addEventListener('click', () => onClickCallback(avatarUrl, avatarDiv));
-        return avatarDiv;
-    }
-
-    function loadAvatarsForRegister() {
-        dom.register.avatarContainer.innerHTML = '';
-        config.assets.avatars.forEach((avatarUrl, index) => {
-            const avatarDiv = createAvatarElement(avatarUrl, (url, element) => {
-                document.querySelectorAll('#avatar-container .avatar-option').forEach(el => el.classList.remove('selected'));
-                element.classList.add('selected');
-                state.avatar = url;
-            });
-            if (index === 0) avatarDiv.classList.add('selected');
-            dom.register.avatarContainer.appendChild(avatarDiv);
-        });
-    }
-
-    function loadAvatarsToStore() {
-        dom.avatarStore.grid.innerHTML = '';
-        config.assets.avatars.forEach(avatarUrl => {
-            const avatarDiv = createAvatarElement(avatarUrl, (url, element) => {
-                state.avatar = url;
-                setupMainMenu();
-                document.querySelectorAll('#avatar-store-grid .avatar-option').forEach(el => el.classList.remove('selected'));
-                element.classList.add('selected');
-                showMessage("آواتار شما تغییر کرد!");
-                setTimeout(() => hidePanel('avatarStore'), 500);
-            });
-            if (avatarUrl === state.avatar) avatarDiv.classList.add('selected');
-            dom.avatarStore.grid.appendChild(avatarDiv);
-        });
-    }
-
-    function setupMainMenu() {
-        dom.mainMenu.usernameDisplay.textContent = state.username;
-        dom.mainMenu.avatarDisplay.style.backgroundImage = `url(${state.avatar})`;
-        if (state.isCreator) {
-            dom.mainMenu.creatorBadge.classList.remove('hidden');
-        } else {
-            dom.mainMenu.creatorBadge.classList.add('hidden');
+    function startChallengeRun(type) {
+        challengeModal.classList.add('hidden');
+        isChallengeMode = true;
+        challengeType = type;
+        challengeStreak = 0;
+        
+        if(type === 'speed') {
+            currentMode = 'flash';
+            challengeTarget = 3;
+            maxTime = 30;
+        } else if (type === 'marathon') {
+            currentMode = 'old';
+            challengeTarget = 5;
+            maxTime = 30; 
+        } else if (type === 'hardcore') {
+            currentMode = 'flash';
+            challengeTarget = 3;
+            maxTime = 15; // Hardcore time
         }
+        
+        startGame(); // Starts immediately
     }
 
-    function setupProfilePanel() {
-        dom.profilePanel.avatar.style.backgroundImage = `url(${state.avatar})`;
-        dom.profilePanel.username.textContent = state.username;
-        dom.profilePanel.age.textContent = state.age;
-        dom.profilePanel.avatarCount.textContent = config.assets.avatars.length;
-        dom.profilePanel.gamesPlayed.textContent = state.gamesPlayed;
-        const minutes = Math.floor(state.playTime / 60);
-        const seconds = state.playTime % 60;
-        dom.profilePanel.playTime.textContent = `${minutes} دقیقه و ${seconds} ثانیه`;
+    // --- Game Logic ---
+    function updateMenuUI() {
+        document.getElementById('menu-score').textContent = gameState.highScore;
+        document.getElementById('menu-coins').textContent = gameState.coins;
+        document.getElementById('menu-tickets').textContent = gameState.skipTickets || 0;
     }
 
-    function loadChallenge() {
-        if (usedChallengeIndices.length === rapChallenges.length) usedChallengeIndices = [];
-        let newIndex;
-        do {
-            newIndex = Math.floor(Math.random() * rapChallenges.length);
-        } while (usedChallengeIndices.includes(newIndex));
-        usedChallengeIndices.push(newIndex);
-        currentChallenge = rapChallenges[newIndex];
-
-        dom.rapGame.displayLyrics.textContent = currentChallenge.line;
-        dom.rapGame.rapInput.value = '';
-        dom.rapGame.feedbackMessage.textContent = '';
-        dom.rapGame.feedbackMessage.className = 'feedback-message';
-        dom.rapGame.nextRapBtn.classList.add('hidden');
-        dom.rapGame.submitRapBtn.classList.remove('hidden');
-        dom.rapGame.rapInput.disabled = false;
-        dom.rapGame.rapInput.focus();
-    }
-
-    function checkRhyme() {
-        const userInput = dom.rapGame.rapInput.value.trim();
-        if (!userInput) return showMessage("اول باید یه چیزی بنویسی!");
-
-        const lastWord = userInput.split(' ').pop().replace(/[.,!؟،؛]/g, '').toLowerCase();
-        const feedbackMsg = dom.rapGame.feedbackMessage;
-
-        if (currentChallenge.rhymes.includes(lastWord)) {
-            feedbackMsg.textContent = config.screens.rap_game.feedback_messages.success;
-            feedbackMsg.className = 'feedback-message feedback-success';
-            dom.rapGame.nextRapBtn.classList.remove('hidden');
-            dom.rapGame.submitRapBtn.classList.add('hidden');
-            dom.rapGame.rapInput.disabled = true;
-            state.gamesPlayed++;
-        } else {
-            feedbackMsg.textContent = config.screens.rap_game.feedback_messages.failure;
-            feedbackMsg.className = 'feedback-message feedback-failure';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadAvatarsForRegister();
-
-        dom.register.registerBtn.addEventListener('click', () => {
-            const username = dom.register.usernameInput.value.trim();
-            const age = dom.register.ageInput.value;
-            const password = dom.register.passwordInput.value;
-
-            if (!username || !age || !password) return showMessage("لطفاً همه‌ی فیلدها رو پر کن.");
-            if (password !== dom.register.confirmPasswordInput.value) return showMessage("رمزهای عبور با هم مطابقت ندارن.");
-
-            state.username = username;
-            state.age = age;
-            state.userId = generateRandomId(6);
-
-            showScreen('loading');
-
-            setTimeout(() => {
-                setupMainMenu();
-                showScreen('mainMenu');
-            }, config.screens.loading.duration_seconds * 1000);
-        });
+    function startGame() {
+        score = 0;
+        currentRiddleIndex = 0;
+        shuffledRiddles = [...riddles].sort(() => Math.random() - 0.5);
         
-        dom.mainMenu.settingsBtn.addEventListener('click', () => showPanel('settings'));
-        dom.mainMenu.startFlowBtn.addEventListener('click', () => showPanel('gameModes'));
-        dom.mainMenu.onlineGameBtn.addEventListener('click', () => showMessage('بازی آنلاین (به زودی...)'));
+        // UI Reset
+        document.getElementById('score-display').classList.remove('hidden');
+        document.getElementById('challenge-progress').classList.add('hidden');
+        document.getElementById('skip-btn').classList.add('hidden');
 
-        dom.mainMenu.userInfoHeader.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const rect = dom.mainMenu.userInfoHeader.getBoundingClientRect();
-            dom.mainMenu.avatarMenu.style.top = `${rect.bottom + 10}px`;
-            dom.mainMenu.avatarMenu.style.right = `${window.innerWidth - rect.right}px`;
-            dom.mainMenu.avatarMenu.classList.toggle('hidden');
-        });
-        
-        const openAvatarStore = () => {
-            loadAvatarsToStore();
-            showPanel('avatarStore');
-            dom.mainMenu.avatarMenu.classList.add('hidden');
-        };
+        if(isChallengeMode) {
+            lives = 1; // All challenges are 1 life usually (streak based)
+            document.getElementById('score-display').classList.add('hidden');
+            document.getElementById('challenge-progress').classList.remove('hidden');
+            document.getElementById('challenge-count').textContent = '0';
+            document.getElementById('challenge-target').textContent = challengeTarget;
+            
+            document.getElementById('game-stats').textContent = '⚠️ چالش';
 
-        dom.mainMenu.profileBtn.addEventListener('click', () => {
-            setupProfilePanel();
-            showPanel('profile');
-            dom.mainMenu.avatarMenu.classList.add('hidden');
-        });
-        
-        dom.mainMenu.avatarStoreBtnFromMenu.addEventListener('click', openAvatarStore);
-        dom.mainMenu.shopNavBtn.addEventListener('click', openAvatarStore);
-
-        dom.closePanelBtns.forEach(btn => {
-            btn.addEventListener('click', () => hidePanel(btn.dataset.panel));
-        });
-
-        dom.gameModes.startRapGameCard.addEventListener('click', () => {
-            hideAllPanels();
-            loadChallenge();
-            showScreen('rapGame');
-        });
-
-        // این بخش باید بروزرسانی شود تا کارت‌های جدید هم در بر بگیرد
-        document.querySelectorAll('[data-message]').forEach(element => {
-             element.addEventListener('click', () => showMessage(element.dataset.message));
-        });
-        
-        dom.settingsPanel.submitGiftCodeBtn.addEventListener('click', () => {
-            const code = dom.settingsPanel.giftCodeInput.value.trim();
-            if (code === config.creator_gift_code) {
-                state.isCreator = true;
-                setupMainMenu();
-                showMessage("تبریک! شما به عنوان سازنده شناخته شدید.");
-                hidePanel('settings');
-                dom.settingsPanel.giftCodeInput.value = '';
+            if(currentMode === 'flash') {
+                document.getElementById('options-container').classList.add('hidden');
+                document.getElementById('flash-container').classList.remove('hidden');
+                document.getElementById('timer-bar-container').classList.remove('hidden');
             } else {
-                showMessage("کد هدیه نامعتبر است.");
+                // Marathon (Old mode)
+                document.getElementById('options-container').classList.remove('hidden');
+                document.getElementById('flash-container').classList.add('hidden');
+                document.getElementById('timer-bar-container').classList.add('hidden');
             }
-        });
 
-        dom.rapGame.submitRapBtn.addEventListener('click', checkRhyme);
-        dom.rapGame.nextRapBtn.addEventListener('click', loadChallenge);
-        dom.rapGame.gameBackBtn.addEventListener('click', () => {
-            hideAllPanels();
-            showScreen('mainMenu');
-        });
+        } else if(currentMode === 'old') {
+            lives = 3;
+            maxTime = 30;
+            document.getElementById('options-container').classList.remove('hidden');
+            document.getElementById('flash-container').classList.add('hidden');
+            document.getElementById('timer-bar-container').classList.add('hidden');
+            document.getElementById('game-stats').textContent = '❤️ ' + lives;
+        } else {
+            // Flash Normal
+            lives = 3;
+            maxTime = 30;
+            document.getElementById('options-container').classList.add('hidden');
+            document.getElementById('flash-container').classList.remove('hidden');
+            document.getElementById('timer-bar-container').classList.remove('hidden');
+            document.getElementById('game-stats').textContent = '⏳ ' + maxTime;
+        }
+        
+        if(!isChallengeMode && gameState.skipTickets > 0) {
+            document.getElementById('skip-btn').classList.remove('hidden');
+        }
 
-        dom.rapGame.rapInput.addEventListener('keypress', e => {
-            if (e.key === 'Enter') { e.preventDefault(); checkRhyme(); }
-        });
+        showScreen('gameplay-screen');
+        loadRiddle();
+    }
 
-        document.addEventListener('click', (e) => {
-            if (!dom.mainMenu.avatarMenu.classList.contains('hidden') && !dom.mainMenu.userInfoHeader.contains(e.target)) {
-                dom.mainMenu.avatarMenu.classList.add('hidden');
+    function loadRiddle() {
+        if(currentRiddleIndex >= shuffledRiddles.length) {
+            endGame();
+            return;
+        }
+
+        const data = shuffledRiddles[currentRiddleIndex];
+        document.getElementById('riddle-text').textContent = data.riddle;
+        document.getElementById('game-score').textContent = score;
+
+        const input = document.getElementById('flash-input');
+        input.value = '';
+        input.classList.remove('correct-flash', 'wrong-flash');
+
+        if(currentMode === 'old') {
+            setupOldMode(data);
+        } else {
+            setupFlashMode(data);
+        }
+    }
+
+    function setupOldMode(data) {
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        let opts = [...data.options].sort(() => Math.random() - 0.5);
+        
+        opts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.textContent = opt;
+            btn.onclick = () => checkOldAnswer(btn, opt, data.answer);
+            container.appendChild(btn);
+        });
+    }
+
+    function checkOldAnswer(btn, selected, correctText) {
+        const buttons = document.querySelectorAll('.btn-option');
+        buttons.forEach(b => b.disabled = true);
+
+        if(selected === correctText) {
+            btn.classList.add('correct-flash');
+            if(isChallengeMode) {
+                challengeStreak++;
+                document.getElementById('challenge-count').textContent = challengeStreak;
+                if(challengeStreak >= challengeTarget) {
+                    setTimeout(winChallenge, 1000);
+                    return;
+                }
+            } else {
+                score += 10;
+                gameState.coins += 5;
             }
-        });
+            setTimeout(nextQuestion, 1200);
+        } else {
+            btn.classList.add('wrong-flash');
+            
+            if(isChallengeMode) {
+                 showToast("چالش باختید!");
+                 setTimeout(() => showScreen('main-menu-screen'), 1500);
+                 return;
+            }
 
-        setInterval(() => {
-            if(!dom.screens.rapGame.classList.contains('hidden')) {
-                state.playTime++;
+            lives--;
+            document.getElementById('game-stats').textContent = '❤️ ' + lives;
+            buttons.forEach(b => {
+                if(b.textContent === correctText) b.classList.add('correct-flash');
+            });
+            
+            if(lives <= 0) setTimeout(endGame, 1500);
+            else setTimeout(nextQuestion, 1500);
+        }
+    }
+
+    function setupFlashMode(data) {
+        const input = document.getElementById('flash-input');
+        input.focus();
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = maxTime;
+        updateTimerUI();
+        
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerUI();
+            if(timeLeft <= 0) {
+                handleFlashTimeOut();
             }
         }, 1000);
+    }
+
+    function updateTimerUI() {
+        if(!isChallengeMode || challengeType === 'hardcore') {
+             document.getElementById('game-stats').textContent = (isChallengeMode ? '🔥 ' : '⏳ ') + timeLeft;
+        }
+        
+        const pct = (timeLeft / maxTime) * 100;
+        document.getElementById('timer-bar').style.width = pct + '%';
+        if(timeLeft < 5) document.getElementById('timer-bar').style.backgroundColor = '#ef4444';
+        else document.getElementById('timer-bar').style.backgroundColor = '#FFD700';
+    }
+
+    function handleFlashTimeOut() {
+        clearInterval(timerInterval);
+        document.getElementById('flash-input').classList.add('wrong-flash');
+        
+        if(isChallengeMode) {
+            showToast("زمان تمام شد! باختید.");
+            setTimeout(() => {
+                showScreen('main-menu-screen');
+            }, 1500);
+        } else {
+            setTimeout(endGame, 1000);
+        }
+    }
+
+    function checkFlashAnswer() {
+        const input = document.getElementById('flash-input');
+        const userVal = normalize(input.value);
+        const correctVal = normalize(shuffledRiddles[currentRiddleIndex].answer);
+
+        if(userVal === correctVal) {
+            clearInterval(timerInterval);
+            input.classList.add('correct-flash');
+            
+            if(isChallengeMode) {
+                challengeStreak++;
+                document.getElementById('challenge-count').textContent = challengeStreak;
+                if(challengeStreak >= challengeTarget) {
+                    setTimeout(winChallenge, 1000);
+                    return;
+                }
+            } else {
+                score += 20;
+                gameState.coins += 10;
+            }
+            setTimeout(nextQuestion, 1000);
+        } else {
+            input.classList.add('wrong-flash');
+            setTimeout(() => input.classList.remove('wrong-flash'), 500);
+        }
+    }
+
+    function winChallenge() {
+        let rewardMsg = "";
+        
+        if(challengeType === 'speed') {
+            gameState.skipTickets = (gameState.skipTickets || 0) + 1;
+            rewardMsg = "1x بلیط رد کردن";
+        } else if (challengeType === 'marathon') {
+            gameState.coins += 200;
+            rewardMsg = "200 سکه";
+        } else if (challengeType === 'hardcore') {
+            gameState.skipTickets = (gameState.skipTickets || 0) + 2;
+            rewardMsg = "2x بلیط رد کردن";
+        }
+
+        saveData();
+        
+        document.getElementById('game-over-title').textContent = "تبریک!";
+        document.getElementById('game-over-title').className = "text-5xl font-black mb-6 text-indigo-400";
+        document.getElementById('game-over-msg').innerHTML = `شما برنده <span class='text-white font-bold'>${rewardMsg}</span> شدید!`;
+        document.getElementById('final-score').parentElement.style.display = 'none'; 
+        
+        showScreen('game-over-screen');
+    }
+
+    function useSkipTicket() {
+        if(gameState.skipTickets > 0) {
+            gameState.skipTickets--;
+            saveData();
+            clearInterval(timerInterval);
+            showToast("سوال رد شد! (" + gameState.skipTickets + ")");
+            if(gameState.skipTickets <= 0) document.getElementById('skip-btn').classList.add('hidden');
+            nextQuestion();
+        }
+    }
+
+    function nextQuestion() {
+        currentRiddleIndex++;
+        loadRiddle();
+    }
+
+    function endGame() {
+        clearInterval(timerInterval);
+        if(!isChallengeMode && score > gameState.highScore) gameState.highScore = score;
+        saveData();
+        
+        document.getElementById('game-over-title').textContent = "پایان بازی";
+        document.getElementById('game-over-title').className = "text-5xl font-black mb-6 gold-text";
+        document.getElementById('game-over-msg').innerHTML = 'امتیاز شما: <span id="final-score" class="text-white">0</span>';
+        document.getElementById('final-score').parentElement.style.display = 'block';
+        document.getElementById('final-score').textContent = score;
+        
+        showScreen('game-over-screen');
+    }
+
+    function saveData() {
+        localStorage.setItem('houshyar_game_data', JSON.stringify(gameState));
+    }
+
+    // --- Event Listeners ---
+    document.getElementById('flash-submit-btn').addEventListener('click', checkFlashAnswer);
+    document.getElementById('flash-input').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') checkFlashAnswer();
     });
+
+    document.getElementById('play-again-btn').addEventListener('click', () => {
+         startGame(); 
+    });
+    
+    document.getElementById('back-to-menu-btn').addEventListener('click', () => showScreen('main-menu-screen'));
+    document.getElementById('exit-game-btn').addEventListener('click', () => {
+        clearInterval(timerInterval);
+        showScreen('main-menu-screen');
+    });
+    
+    document.getElementById('challenges-btn').addEventListener('click', () => showToast('آرشیو سوالات هنوز فعال نیست'));
+    document.getElementById('settings-btn').addEventListener('click', () => showToast());
+
+    // Init
+    window.onload = function() {
+        // Load Data
+        const saved = localStorage.getItem('houshyar_game_data');
+        if(saved) {
+            const parsed = JSON.parse(saved);
+            gameState.highScore = parsed.highScore || 0;
+            gameState.coins = parsed.coins || 500;
+            gameState.skipTickets = parsed.skipTickets || 0;
+        }
+        
+        // Handle Splash Screen Logic
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            splash.style.opacity = '0'; // Start fade out
+            setTimeout(() => {
+                splash.style.display = 'none'; // Remove from DOM flow
+                
+                // Show Main Menu & Start Matrix
+                document.getElementById('main-menu-screen').classList.add('active');
+                updateMenuUI();
+                startMatrixEffect();
+            }, 1000); // Wait for fade out
+        }, 6000); // 6 Seconds Duration
+    };
+
 </script>
 </body>
 </html>
