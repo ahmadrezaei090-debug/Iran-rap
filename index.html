@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بازی هوشیار</title>
+    <!-- استایل‌های آماده -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -144,57 +145,12 @@
         .challenge-btn-sm {
             padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;
         }
-        
-        /* --- SPLASH SCREEN (INTRO) --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background-color: #000; z-index: 100;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease;
-        }
-        
-        #splash-image {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; 
-            object-position: center;
-            z-index: 1;
-        }
-
-        /* پیام لمس برای شروع - بدون لودینگ */
-        #tap-to-start-msg {
-            display: block; /* همیشه نمایش داده شود */
-            color: #fff; font-size: 1.5rem; font-weight: 900;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-            animation: pulse-text 1.5s infinite;
-            cursor: pointer; z-index: 10;
-            position: absolute; bottom: 80px;
-            background: rgba(0,0,0,0.5); /* بک‌گراند تیره برای خوانایی */
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,215,0,0.3);
-        }
-
-        @keyframes pulse-text {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
-        }
-
     </style>
 </head>
 <body class="h-screen w-screen overflow-hidden bg-black">
 
-<!-- SPLASH SCREEN (INTRO) - بازگشت صفحه اول -->
-<div id="splash-screen">
-    <!-- عکس پس زمینه -->
-    <img id="splash-image" src="https://github.com/ahmadrezaei090-debug/soberWeb/blob/main/negin-art-1764247215354.png?raw=true" alt="Intro Logo">
-    
-    <!-- پیام لمس برای شروع (جایگزین لودینگ شده است) -->
-    <div id="tap-to-start-msg">برای شروع لمس کنید</div>
-</div>
-
-<!-- 1. MAIN MENU SCREEN -->
-<div id="main-menu-screen" class="screen h-full justify-between p-6 relative">
+<!-- 1. MAIN MENU SCREEN (Visible Immediately) -->
+<div id="main-menu-screen" class="screen active h-full justify-between p-6 relative">
     
     <!-- Matrix Background Canvas -->
     <canvas id="matrix-bg"></canvas>
@@ -284,7 +240,7 @@
     </div>
 </div>
 
-<!-- UPDATED CHALLENGE MODAL (With Rewards) -->
+<!-- CHALLENGE MODAL -->
 <div id="challenge-modal" class="fixed inset-0 z-50 hidden modal-overlay flex justify-center items-center">
     <div class="game-card w-11/12 max-w-sm text-center bg-black" style="border-color: #818cf8;">
         <h2 class="text-xl font-black text-indigo-400 mb-4">مرکز چالش‌ها</h2>
@@ -886,19 +842,8 @@
             gameState.skipTickets = parsed.skipTickets || 0;
         }
 
-        // فقط لاجیک کلیک روی صفحه اول را اضافه میکنیم
-        // تایمر و نوار لودینگ کاملاً حذف شده‌اند
-        const splashScreen = document.getElementById('splash-screen');
-        
-        splashScreen.onclick = function() {
-            splashScreen.style.opacity = '0';
-            setTimeout(() => {
-                splashScreen.style.display = 'none';
-                document.getElementById('main-menu-screen').classList.add('active');
-                updateMenuUI();
-                startMatrixEffect();
-            }, 800);
-        };
+        // DIRECTLY SHOW MAIN MENU (NO SPLASH)
+        showScreen('main-menu-screen');
     };
 
 </script>
