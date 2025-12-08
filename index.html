@@ -21,6 +21,8 @@
             --accent-gold: #ffd700;
             --text-color: #f5f5f5;
             --shadow: rgba(212, 175, 55, 0.3);
+            --glass-bg: rgba(10, 10, 10, 0.85);
+            --glass-border: rgba(212, 175, 55, 0.2);
         }
 
         body {
@@ -28,6 +30,16 @@
             color: var(--text-color);
             overflow-x: hidden;
             line-height: 1.6;
+        }
+
+        /* حذف هایلایت آبی هنگام کلیک */
+        *:focus {
+            outline: none !important;
+        }
+
+        button, input, .nav-item, .option-btn, .mode-btn, .modal-btn {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
         }
 
         .container {
@@ -147,30 +159,55 @@
             overflow: hidden;
         }
 
-        /* دایره هوشیار */
-        .logo-circle {
+        /* دایره هوشیار جدید - نصف طلایی نصف مشکی */
+        .logo-container {
             position: absolute;
             top: 20px;
             right: 20px;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--primary-black) 30%, var(--primary-gold) 100%);
-            border: 3px solid var(--primary-gold);
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: var(--primary-gold);
-            font-weight: bold;
-            font-size: 1.5rem;
-            box-shadow: 0 0 20px var(--shadow);
-            animation: pulse 2s infinite alternate;
+            gap: 15px;
             z-index: 100;
         }
 
+        .logo-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px var(--shadow);
+            border: 3px solid var(--primary-gold);
+        }
+
+        .logo-circle-half {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-half-black {
+            background-color: var(--primary-black);
+            clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+        }
+
+        .logo-half-gold {
+            background-color: var(--primary-gold);
+            clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+            right: 0;
+        }
+
+        .logo-text {
+            color: var(--primary-gold);
+            font-weight: bold;
+            font-size: 2rem;
+            text-shadow: 0 0 10px var(--shadow);
+            animation: pulse 2s infinite alternate;
+        }
+
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 10px var(--shadow); }
-            100% { transform: scale(1.05); box-shadow: 0 0 25px var(--shadow); }
+            0% { text-shadow: 0 0 10px var(--shadow); }
+            100% { text-shadow: 0 0 20px var(--primary-gold), 0 0 30px var(--primary-gold); }
         }
 
         /* تنظیمات */
@@ -260,19 +297,35 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* نوار پایین */
+        /* نوار پایین جدید و جذاب */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(10, 10, 10, 0.9);
-            border-top: 2px solid var(--primary-gold);
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 800px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             display: flex;
             justify-content: space-around;
-            padding: 15px 0;
+            padding: 15px 10px;
             z-index: 200;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px var(--shadow);
+            overflow: hidden;
+        }
+
+        .bottom-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+            z-index: -1;
         }
 
         .nav-item {
@@ -283,8 +336,28 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            padding: 5px 15px;
-            border-radius: 10px;
+            padding: 10px 20px;
+            border-radius: 15px;
+            position: relative;
+            flex: 1;
+            max-width: 120px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+            border-radius: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item:hover::before {
+            opacity: 1;
         }
 
         .nav-item:hover {
@@ -293,8 +366,124 @@
         }
 
         .nav-item i {
-            font-size: 1.5rem;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            color: var(--primary-gold);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover i {
+            color: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        /* پنل انتخاب نوع بازی (Modal) */
+        .game-mode-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--secondary-black) 0%, var(--primary-black) 100%);
+            border: 2px solid var(--primary-gold);
+            border-radius: 25px;
+            width: 90%;
+            max-width: 800px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px var(--shadow);
+            position: relative;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-title {
+            font-size: 2.8rem;
+            color: var(--primary-gold);
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px var(--shadow);
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .modal-btn {
+            background-color: rgba(26, 26, 26, 0.9);
+            border: 3px solid var(--primary-gold);
+            border-radius: 20px;
+            padding: 25px;
+            width: 300px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+            background-color: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent-gold);
+        }
+
+        .modal-icon {
+            font-size: 3.5rem;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+        }
+
+        .modal-name {
+            font-size: 1.8rem;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        .modal-desc {
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: transparent;
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-modal:hover {
+            background-color: var(--primary-gold);
+            color: var(--primary-black);
+            transform: rotate(90deg);
         }
 
         /* صفحه بازی */
@@ -346,6 +535,31 @@
         .stat-label {
             font-size: 0.9rem;
             color: #ccc;
+        }
+
+        /* دکمه برگشت در صفحه بازی */
+        .back-to-menu-btn {
+            position: absolute;
+            top: 25px;
+            right: 120px;
+            background-color: transparent;
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-to-menu-btn:hover {
+            background-color: var(--primary-gold);
+            color: var(--primary-black);
+            transform: scale(1.05);
         }
 
         /* سوال */
@@ -485,91 +699,7 @@
             color: #555;
         }
 
-        /* صفحه انتخاب بازی */
-        .game-mode-screen {
-            display: none;
-            width: 100%;
-            min-height: 100vh;
-            position: relative;
-            background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
-            padding: 40px;
-            overflow: hidden;
-        }
-
-        .mode-title {
-            text-align: center;
-            font-size: 3rem;
-            color: var(--primary-gold);
-            margin-bottom: 50px;
-            text-shadow: 0 0 20px var(--shadow);
-        }
-
-        .mode-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-        }
-
-        .mode-btn {
-            background-color: rgba(26, 26, 26, 0.9);
-            border: 3px solid var(--primary-gold);
-            border-radius: 20px;
-            padding: 30px;
-            width: 300px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .mode-btn:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
-            background-color: rgba(212, 175, 55, 0.1);
-        }
-
-        .mode-icon {
-            font-size: 4rem;
-            color: var(--primary-gold);
-            margin-bottom: 20px;
-        }
-
-        .mode-name {
-            font-size: 2rem;
-            color: var(--primary-gold);
-            margin-bottom: 15px;
-        }
-
-        .mode-desc {
-            font-size: 1.1rem;
-            color: #ccc;
-            line-height: 1.5;
-        }
-
-        /* دکمه بازگشت */
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: transparent;
-            border: 2px solid var(--primary-gold);
-            color: var(--primary-gold);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .back-btn:hover {
-            background-color: var(--primary-gold);
-            color: var(--primary-black);
-            transform: scale(1.05);
-        }
-
-        /* افکت‌های پس‌زمینه */
+        /* افکت‌های پس‌زمینه - حذف انیمیشن حروف */
         .bg-effects {
             position: absolute;
             top: 0;
@@ -579,19 +709,6 @@
             overflow: hidden;
             z-index: 0;
             pointer-events: none;
-        }
-
-        .bg-particle {
-            position: absolute;
-            background-color: var(--primary-gold);
-            border-radius: 50%;
-            opacity: 0.3;
-            animation: float 15s infinite linear;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-1000px) rotate(720deg); }
         }
 
         /* صفحه نتیجه */
@@ -641,18 +758,28 @@
                 font-size: 1.1rem;
             }
             
-            .logo-circle {
-                width: 60px;
-                height: 60px;
-                font-size: 1.2rem;
+            .logo-container {
                 top: 10px;
                 right: 10px;
             }
+            
+            .logo-circle {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
 
-            .settings-btn, .back-btn {
+            .settings-btn, .back-to-menu-btn {
                 padding: 8px 15px;
                 font-size: 1rem;
                 top: 15px;
+            }
+            
+            .back-to-menu-btn {
+                right: 100px;
             }
 
             .main-buttons {
@@ -663,35 +790,56 @@
                 font-size: 1.5rem;
                 padding: 15px 30px;
             }
-
+            
+            .bottom-nav {
+                width: 95%;
+                padding: 10px 5px;
+                bottom: 10px;
+            }
+            
+            .nav-item {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .nav-item i {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+            }
+            
+            .modal-title {
+                font-size: 2.2rem;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .modal-btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 20px;
+            }
+            
+            .modal-icon {
+                font-size: 3rem;
+            }
+            
+            .modal-name {
+                font-size: 1.6rem;
+            }
+            
             .options-container {
                 grid-template-columns: 1fr;
             }
 
             .question-text {
                 font-size: 1.5rem;
-            }
-
-            .mode-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .mode-btn {
-                width: 90%;
-            }
-
-            .bottom-nav {
-                padding: 10px 0;
-            }
-
-            .nav-item {
-                padding: 5px 10px;
-                font-size: 0.8rem;
-            }
-
-            .nav-item i {
-                font-size: 1.2rem;
             }
 
             .game-title {
@@ -727,7 +875,14 @@
 
         <!-- صفحه منو -->
         <div class="menu-screen" id="menuScreen">
-            <div class="logo-circle">هوشیار</div>
+            <div class="logo-container">
+                <div class="logo-circle">
+                    <div class="logo-circle-half logo-half-black"></div>
+                    <div class="logo-circle-half logo-half-gold"></div>
+                </div>
+                <div class="logo-text">هوشیار</div>
+            </div>
+            
             <button class="settings-btn" id="settingsBtn">
                 <i class="fas fa-cog"></i> تنظیمات
             </button>
@@ -752,36 +907,43 @@
                 </div>
             </div>
             
+            <!-- پس‌زمینه ساده بدون انیمیشن -->
             <div class="bg-effects" id="bgEffects"></div>
         </div>
 
-        <!-- صفحه انتخاب نوع بازی -->
-        <div class="game-mode-screen" id="gameModeScreen">
-            <button class="back-btn" id="backToMenuBtn">
-                <i class="fas fa-arrow-right"></i> بازگشت به منو
-            </button>
-            
-            <h1 class="mode-title">انتخاب نوع بازی</h1>
-            
-            <div class="mode-buttons">
-                <div class="mode-btn" id="dualFlashBtn">
-                    <div class="mode-icon"><i class="fas fa-keyboard"></i></div>
-                    <h2 class="mode-name">دونیم فلش</h2>
-                    <p class="mode-desc">چیستان با پاسخ تایپی - ۱۷ ثانیه وقت برای هر سوال - ۳ جان</p>
+        <!-- پنل انتخاب نوع بازی (Modal) -->
+        <div class="game-mode-modal" id="gameModeModal">
+            <div class="modal-content">
+                <button class="close-modal" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <h1 class="modal-title">انتخاب نوع بازی</h1>
+                
+                <div class="modal-buttons">
+                    <div class="modal-btn" id="modalDualFlashBtn">
+                        <div class="modal-icon"><i class="fas fa-keyboard"></i></div>
+                        <h2 class="modal-name">دونیم فلش</h2>
+                        <p class="modal-desc">چیستان با پاسخ تایپی - ۱۷ ثانیه وقت برای هر سوال - ۳ جان</p>
+                    </div>
+                    
+                    <div class="modal-btn" id="modalDualOldBtn">
+                        <div class="modal-icon"><i class="fas fa-list-ol"></i></div>
+                        <h2 class="modal-name">دو اولد</h2>
+                        <p class="modal-desc">چیستان با چهار گزینه - بدون محدودیت زمان - بدون از دست دادن جان</p>
+                    </div>
                 </div>
                 
-                <div class="mode-btn" id="dualOldBtn">
-                    <div class="mode-icon"><i class="fas fa-list-ol"></i></div>
-                    <h2 class="mode-name">دو اولد</h2>
-                    <p class="mode-desc">چیستان با چهار گزینه - بدون محدودیت زمان - بدون از دست دادن جان</p>
-                </div>
+                <p style="color: #aaa; font-size: 0.9rem; margin-top: 20px;">برای شروع بازی، یکی از حالت‌ها را انتخاب کنید</p>
             </div>
-            
-            <div class="bg-effects"></div>
         </div>
 
         <!-- صفحه بازی دونیم فلش -->
         <div class="game-screen" id="dualFlashGameScreen">
+            <button class="back-to-menu-btn" id="backFromFlashBtn">
+                <i class="fas fa-arrow-right"></i> بازگشت
+            </button>
+            
             <div class="game-header">
                 <h1 class="game-title">دونیم فلش</h1>
                 <div class="game-stats">
@@ -816,11 +978,15 @@
                 <button class="next-btn" id="flashNextBtn">تایید و ادامه</button>
             </div>
             
-            <div class="bg-effects"></div>
+            <div class="bg-effects" id="flashBgEffects"></div>
         </div>
 
         <!-- صفحه بازی دو اولد -->
         <div class="game-screen" id="dualOldGameScreen">
+            <button class="back-to-menu-btn" id="backFromOldBtn">
+                <i class="fas fa-arrow-right"></i> بازگشت
+            </button>
+            
             <div class="game-header">
                 <h1 class="game-title">دو اولد</h1>
                 <div class="game-stats">
@@ -845,12 +1011,12 @@
                 <button class="next-btn" id="oldNextBtn" style="display: none;">سوال بعدی</button>
             </div>
             
-            <div class="bg-effects"></div>
+            <div class="bg-effects" id="oldBgEffects"></div>
         </div>
 
         <!-- صفحه نتیجه -->
         <div class="result-screen" id="resultScreen">
-            <button class="back-btn" id="backToMenuFromResultBtn">
+            <button class="back-to-menu-btn" id="backToMenuFromResultBtn">
                 <i class="fas fa-arrow-right"></i> بازگشت به منو
             </button>
             
@@ -864,7 +1030,7 @@
             
             <button class="main-btn" id="playAgainBtn">بازی مجدد</button>
             
-            <div class="bg-effects"></div>
+            <div class="bg-effects" id="resultBgEffects"></div>
         </div>
     </div>
 
@@ -997,44 +1163,17 @@
         // المنت‌های DOM
         const splashScreen = document.getElementById('splashScreen');
         const menuScreen = document.getElementById('menuScreen');
-        const gameModeScreen = document.getElementById('gameModeScreen');
+        const gameModeModal = document.getElementById('gameModeModal');
         const dualFlashGameScreen = document.getElementById('dualFlashGameScreen');
         const dualOldGameScreen = document.getElementById('dualOldGameScreen');
         const resultScreen = document.getElementById('resultScreen');
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
 
-        // ایجاد افکت‌های پس‌زمینه
-        function createBackgroundEffects() {
-            const effectsContainer = document.getElementById('bgEffects');
-            if (!effectsContainer) return;
-            
-            effectsContainer.innerHTML = '';
-            
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('bg-particle');
-                
-                // اندازه تصادفی
-                const size = Math.random() * 10 + 5;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // موقعیت تصادفی
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                
-                // تاخیر تصادفی برای انیمیشن
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                effectsContainer.appendChild(particle);
-            }
-        }
-
         // تغییر صفحه
         function changeScreen(toScreen) {
             // پنهان کردن تمام صفحات
-            document.querySelectorAll('.menu-screen, .game-mode-screen, .game-screen, .result-screen').forEach(screen => {
+            document.querySelectorAll('.menu-screen, .game-mode-modal, .game-screen, .result-screen').forEach(screen => {
                 screen.style.display = 'none';
             });
             
@@ -1042,30 +1181,31 @@
             switch(toScreen) {
                 case 'menu':
                     menuScreen.style.display = 'block';
-                    createBackgroundEffects();
                     break;
                 case 'gameMode':
-                    gameModeScreen.style.display = 'block';
-                    createBackgroundEffects();
+                    // نمایش پنل مدال
+                    gameModeModal.style.display = 'flex';
                     break;
                 case 'dualFlash':
                     dualFlashGameScreen.style.display = 'block';
                     startDualFlashGame();
-                    createBackgroundEffects();
                     break;
                 case 'dualOld':
                     dualOldGameScreen.style.display = 'block';
                     startDualOldGame();
-                    createBackgroundEffects();
                     break;
                 case 'result':
                     resultScreen.style.display = 'block';
                     showResult();
-                    createBackgroundEffects();
                     break;
             }
             
             gameData.currentScreen = toScreen;
+        }
+
+        // بستن پنل مدال
+        function closeModal() {
+            gameModeModal.style.display = 'none';
         }
 
         // شروع بازی دونیم فلش
@@ -1089,6 +1229,9 @@
             
             // شروع تایمر
             startFlashTimer();
+            
+            // بستن پنل مدال
+            closeModal();
         }
 
         // به روزرسانی نمایش دونیم فلش
@@ -1252,6 +1395,9 @@
             
             // نمایش سوال اول
             showNextOldQuestion();
+            
+            // بستن پنل مدال
+            closeModal();
         }
 
         // به روزرسانی نمایش دو اولد
@@ -1401,9 +1547,6 @@
 
         // رویدادهای کلیک
         document.addEventListener('DOMContentLoaded', function() {
-            // ایجاد افکت‌های پس‌زمینه
-            createBackgroundEffects();
-            
             // تنظیمات نوار پیشرفت
             let progress = 0;
             const totalTime = 7000; // 7 ثانیه
@@ -1434,24 +1577,39 @@
                 changeScreen('gameMode');
             });
             
-            // دکمه بازگشت به منو
-            document.getElementById('backToMenuBtn').addEventListener('click', () => {
-                changeScreen('menu');
+            // دکمه بستن پنل
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            
+            // بستن پنل با کلیک خارج از آن
+            gameModeModal.addEventListener('click', function(e) {
+                if (e.target === gameModeModal) {
+                    closeModal();
+                }
             });
             
-            // دکمه بازگشت به منو از صفحه نتیجه
+            // دکمه بازگشت از صفحه نتیجه
             document.getElementById('backToMenuFromResultBtn').addEventListener('click', () => {
                 changeScreen('menu');
             });
             
-            // دکمه دونیم فلش
-            document.getElementById('dualFlashBtn').addEventListener('click', () => {
+            // دکمه دونیم فلش در پنل
+            document.getElementById('modalDualFlashBtn').addEventListener('click', () => {
                 changeScreen('dualFlash');
             });
             
-            // دکمه دو اولد
-            document.getElementById('dualOldBtn').addEventListener('click', () => {
+            // دکمه دو اولد در پنل
+            document.getElementById('modalDualOldBtn').addEventListener('click', () => {
                 changeScreen('dualOld');
+            });
+            
+            // دکمه برگشت از صفحه بازی دونیم فلش
+            document.getElementById('backFromFlashBtn').addEventListener('click', () => {
+                changeScreen('menu');
+            });
+            
+            // دکمه برگشت از صفحه بازی دو اولد
+            document.getElementById('backFromOldBtn').addEventListener('click', () => {
+                changeScreen('menu');
             });
             
             // دکمه تایید پاسخ در دونیم فلش
