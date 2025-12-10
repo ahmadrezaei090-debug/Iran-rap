@@ -49,7 +49,7 @@
             overflow: hidden;
         }
 
-        /* صفحه اسپلش ساده‌تر شده */
+        /* صفحه اسپلش - بهبود یافته با انیمیشن جدید */
         .splash-screen {
             position: fixed;
             top: 0;
@@ -62,7 +62,7 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 1.5s ease;
+            transition: transform 1s ease, opacity 1s ease;
         }
 
         .splash-content {
@@ -93,11 +93,33 @@
             justify-content: flex-end;
             align-items: center;
             padding-bottom: 80px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
         }
 
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
+        }
+
+        /* انیمیشن اسلاید آپ برای خروج صفحه */
+        @keyframes slideUpOut {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0; }
+        }
+
+        @keyframes slideUpIn {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideDownOut {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+
+        @keyframes slideDownIn {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         /* نوار پیشرفت */
@@ -145,18 +167,33 @@
         }
 
         .splash-screen.fade-out {
-            opacity: 0;
-            pointer-events: none;
+            animation: slideUpOut 1s ease forwards;
         }
 
-        /* صفحه منو */
+        /* صفحه منو با پس‌زمینه جدید */
         .menu-screen {
             display: none;
             width: 100%;
             min-height: 100vh;
             position: relative;
-            background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
+            background: 
+                linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%),
+                /* درختان و کوه‌ها با شفافیت کم */
+                url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=5') center/cover no-repeat;
             overflow: hidden;
+            animation: slideUpIn 1s ease;
+        }
+
+        /* لایه مشکی روی پس‌زمینه برای حفظ تاریکی */
+        .menu-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            z-index: 0;
         }
 
         /* دایره هوشیار جدید - نصف طلایی نصف مشکی */
@@ -492,9 +529,27 @@
             width: 100%;
             min-height: 100vh;
             position: relative;
-            background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
+            background: 
+                linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%),
+                url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=5') center/cover no-repeat;
             padding: 20px;
             overflow: hidden;
+        }
+
+        .game-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            z-index: 0;
+        }
+
+        .game-screen > *:not(.bg-effects) {
+            position: relative;
+            z-index: 1;
         }
 
         .game-header {
@@ -717,10 +772,28 @@
             width: 100%;
             min-height: 100vh;
             position: relative;
-            background: linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%);
+            background: 
+                linear-gradient(135deg, var(--primary-black) 0%, #1a1a1a 100%),
+                url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=5') center/cover no-repeat;
             padding: 40px;
             overflow: hidden;
             text-align: center;
+        }
+
+        .result-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.9);
+            z-index: 0;
+        }
+
+        .result-screen > *:not(.bg-effects) {
+            position: relative;
+            z-index: 1;
         }
 
         .result-title {
@@ -1170,83 +1243,72 @@
         const progressBar = document.getElementById('progressBar');
         const progressText = document.getElementById('progressText');
 
-        // تغییر صفحه - اصلاح شده برای حل مشکل صفحه سیاه
+        // تغییر صفحه با انیمیشن جدید
         function changeScreen(toScreen) {
-            // ذخیره صفحه فعلی
             const previousScreen = gameData.currentScreen;
             
-            // پنهان کردن صفحات بر اساس نیاز
-            switch(toScreen) {
-                case 'menu':
-                    // پنهان کردن همه چیز به جز منو
-                    gameModeModal.style.display = 'none';
-                    dualFlashGameScreen.style.display = 'none';
-                    dualOldGameScreen.style.display = 'none';
-                    resultScreen.style.display = 'none';
-                    // نمایش منو
-                    menuScreen.style.display = 'block';
-                    break;
-                    
-                case 'gameMode':
-                    // پنهان کردن همه چیز به جز منو و مدال
-                    dualFlashGameScreen.style.display = 'none';
-                    dualOldGameScreen.style.display = 'none';
-                    resultScreen.style.display = 'none';
-                    // نمایش منو و مدال
-                    menuScreen.style.display = 'block';
-                    gameModeModal.style.display = 'flex';
-                    break;
-                    
-                case 'dualFlash':
-                    // پنهان کردن همه چیز به جز صفحه بازی فلش
-                    menuScreen.style.display = 'none';
-                    gameModeModal.style.display = 'none';
-                    dualOldGameScreen.style.display = 'none';
-                    resultScreen.style.display = 'none';
-                    // نمایش صفحه بازی فلش
-                    dualFlashGameScreen.style.display = 'block';
-                    startDualFlashGame();
-                    break;
-                    
-                case 'dualOld':
-                    // پنهان کردن همه چیز به جز صفحه بازی اولد
-                    menuScreen.style.display = 'none';
-                    gameModeModal.style.display = 'none';
-                    dualFlashGameScreen.style.display = 'none';
-                    resultScreen.style.display = 'none';
-                    // نمایش صفحه بازی اولد
-                    dualOldGameScreen.style.display = 'block';
-                    startDualOldGame();
-                    break;
-                    
-                case 'result':
-                    // پنهان کردن همه چیز به جز صفحه نتیجه
-                    menuScreen.style.display = 'none';
-                    gameModeModal.style.display = 'none';
-                    dualFlashGameScreen.style.display = 'none';
-                    dualOldGameScreen.style.display = 'none';
-                    // نمایش صفحه نتیجه
-                    resultScreen.style.display = 'block';
-                    showResult();
-                    break;
+            // پنهان کردن همه صفحات
+            menuScreen.style.display = 'none';
+            gameModeModal.style.display = 'none';
+            dualFlashGameScreen.style.display = 'none';
+            dualOldGameScreen.style.display = 'none';
+            resultScreen.style.display = 'none';
+            
+            // اعمال انیمیشن‌های خروج
+            if (previousScreen === 'menu' && menuScreen.style.display === 'block') {
+                menuScreen.style.animation = 'slideDownOut 0.8s ease forwards';
             }
             
-            // به روزرسانی صفحه فعلی
-            gameData.currentScreen = toScreen;
-            
-            // در صورت برگشت از بازی، متوقف کردن تایمرها
-            if (previousScreen === 'dualFlash' && toScreen !== 'dualFlash') {
-                if (gameData.dualFlash.timerInterval) {
-                    clearInterval(gameData.dualFlash.timerInterval);
-                    gameData.dualFlash.timerInterval = null;
+            // نمایش صفحه جدید با تاخیر
+            setTimeout(() => {
+                // حذف انیمیشن‌های قبلی
+                menuScreen.style.animation = '';
+                dualFlashGameScreen.style.animation = '';
+                dualOldGameScreen.style.animation = '';
+                resultScreen.style.animation = '';
+                
+                // نمایش صفحه جدید
+                switch(toScreen) {
+                    case 'menu':
+                        menuScreen.style.display = 'block';
+                        menuScreen.style.animation = 'slideUpIn 0.8s ease forwards';
+                        break;
+                    case 'gameMode':
+                        menuScreen.style.display = 'block';
+                        gameModeModal.style.display = 'flex';
+                        break;
+                    case 'dualFlash':
+                        dualFlashGameScreen.style.display = 'block';
+                        dualFlashGameScreen.style.animation = 'slideUpIn 0.8s ease forwards';
+                        startDualFlashGame();
+                        break;
+                    case 'dualOld':
+                        dualOldGameScreen.style.display = 'block';
+                        dualOldGameScreen.style.animation = 'slideUpIn 0.8s ease forwards';
+                        startDualOldGame();
+                        break;
+                    case 'result':
+                        resultScreen.style.display = 'block';
+                        resultScreen.style.animation = 'slideUpIn 0.8s ease forwards';
+                        showResult();
+                        break;
                 }
-            }
+                
+                gameData.currentScreen = toScreen;
+                
+                // توقف تایمرها در صورت برگشت از بازی
+                if (previousScreen === 'dualFlash' && toScreen !== 'dualFlash') {
+                    if (gameData.dualFlash.timerInterval) {
+                        clearInterval(gameData.dualFlash.timerInterval);
+                        gameData.dualFlash.timerInterval = null;
+                    }
+                }
+            }, 300);
         }
 
-        // بستن پنل مدال - اصلاح شده
+        // بستن پنل مدال
         function closeModal() {
             gameModeModal.style.display = 'none';
-            menuScreen.style.display = 'block';
         }
 
         // شروع بازی دونیم فلش
@@ -1597,12 +1659,12 @@
                     clearInterval(progressInterval);
                     progressText.textContent = "آماده!";
                     
-                    // پس از پر شدن کامل نوار، به صفحه منو برو
+                    // پس از پر شدن کامل نوار، انیمیشن خروج اسپلش و ورود منو
                     setTimeout(() => {
                         splashScreen.classList.add('fade-out');
                         setTimeout(() => {
                             changeScreen('menu');
-                        }, 1500);
+                        }, 800);
                     }, 500);
                 }
             }, intervalTime);
@@ -1614,13 +1676,13 @@
             
             // دکمه بستن پنل
             document.getElementById('closeModalBtn').addEventListener('click', () => {
-                changeScreen('menu');
+                closeModal();
             });
             
             // بستن پنل با کلیک خارج از آن
             gameModeModal.addEventListener('click', function(e) {
                 if (e.target === gameModeModal) {
-                    changeScreen('menu');
+                    closeModal();
                 }
             });
             
@@ -1685,4 +1747,4 @@
         });
     </script>
 </body>
-</html>   
+</html>
